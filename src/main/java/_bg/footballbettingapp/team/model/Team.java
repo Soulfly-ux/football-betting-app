@@ -1,6 +1,7 @@
 package _bg.footballbettingapp.team.model;
 
 
+import _bg.footballbettingapp.common.model.Country;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +30,7 @@ public class Team {
 
     @Column(length = 50)
     @Enumerated(EnumType.STRING)
-    private String country;
+    private Country country;
 
 
     @Column(name = "logo_url", length = 255)

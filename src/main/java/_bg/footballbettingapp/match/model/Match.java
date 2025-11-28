@@ -28,10 +28,10 @@ public class Match {
 
 
     @ManyToOne (optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "awey_team_id", nullable = false)
-    private Team aweyTeam;
+    @JoinColumn(name = "away_team_id", nullable = false)
+    private Team awayTeam;
 
-
+     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
     @Column(name = "match_status")
