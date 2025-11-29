@@ -34,7 +34,7 @@ public class Match {
      @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
-    @Column(name = "match_status")
+    @Column(name = "match_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private MatchStatus matchStatus;
 

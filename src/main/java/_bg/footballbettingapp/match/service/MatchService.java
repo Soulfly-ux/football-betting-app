@@ -58,5 +58,13 @@ public class MatchService {
         return matchRepository.save(match);
     }
 
+    public String getResultAsString(Match match) {
+        if(match.getHomeGoals() == null || match.getAwayGoals() == null) {
+            return "N/A";
+        }
+
+        return match.getHomeGoals() + ":" + match.getAwayGoals();
+    }
+
 
 }

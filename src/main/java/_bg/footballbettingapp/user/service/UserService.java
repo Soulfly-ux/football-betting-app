@@ -98,4 +98,9 @@ public class UserService {
         Optional<User> byId = userRepository.findById(userId);
         return byId.orElseThrow(() -> new DomainException("User not found"));
     }
-}
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+    }
+
