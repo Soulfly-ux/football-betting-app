@@ -13,6 +13,8 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
        List<Team> findAll();
 
+       Optional<Team> findByName(String name);
+
        Optional<Team> findById(UUID id);
 
 
