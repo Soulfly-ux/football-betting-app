@@ -75,14 +75,14 @@ public class BetService {
     }
 
 
-    private void validateStake(BigDecimal stake) {
+    public void validateStake(BigDecimal stake) {
         if(stake == null || stake.compareTo(BigDecimal.ZERO) <= 0) {
             throw new DomainException("Stake must be greater than 0");
         }
     }
 
 
-    private void validateUserCanBet(User user, BigDecimal stake) {
+    public void validateUserCanBet(User user, BigDecimal stake) {
 
         if(user == null) {
 
@@ -100,7 +100,7 @@ public class BetService {
     }
 
 
-    private void validateMatchCanBeBetOn(Match match) {
+    public void validateMatchCanBeBetOn(Match match) {
         if(match == null) {
             throw new DomainException("Match not found");
         }
@@ -126,7 +126,7 @@ public class BetService {
 
 
 
-    private BigDecimal resolveOdds(Match match, BetType betType) {
+    public BigDecimal resolveOdds(Match match, BetType betType) {
         return switch (betType) {
             case HOME_WIN -> match.getOddHome();
             case DRAW -> match.getOddDraw();
@@ -134,7 +134,7 @@ public class BetService {
         };
     }
 
-    private BetType resolveBetType(int homeGoals, int awayGoals) {
+    public BetType resolveBetType(int homeGoals, int awayGoals) {
         if (homeGoals > awayGoals) {
             return BetType.HOME_WIN;
         } else if (homeGoals < awayGoals) {

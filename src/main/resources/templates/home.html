@@ -1,0 +1,409 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Football Betting App</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="page-wrapper">-->
+
+<!--    &lt;!&ndash; Navbar &ndash;&gt;-->
+<!--    <header class="navbar">-->
+<!--        <div class="container navbar-inner">-->
+<!--            <div class="nav-logo">-->
+<!--                <div class="nav-logo-badge">-->
+<!--                    FB-->
+<!--                </div>-->
+<!--                <div class="nav-logo-text">-->
+<!--                    <div class="nav-logo-main">Football Betting</div>-->
+<!--                    <div class="nav-logo-sub">Demo Portfolio Project</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <nav class="nav-links">-->
+<!--                <a class="nav-link active" th:href="@{/}">Home</a>-->
+<!--                <a class="nav-link" th:href="@{/matches}">Matches</a>-->
+<!--                <a class="nav-link" th:href="@{/my-bets}">My Bets</a>-->
+<!--                <a class="btn btn-outline" th:href="@{/login}">Log in</a>-->
+<!--                <a class="btn btn-primary" th:href="@{/register}">Sign up</a>-->
+<!--            </nav>-->
+<!--        </div>-->
+<!--    </header>-->
+
+<!--    &lt;!&ndash; Hero &ndash;&gt;-->
+<!--    <main class="hero">-->
+<!--        <div class="container">-->
+<!--            <div class="hero-grid">-->
+
+<!--                &lt;!&ndash; Left side &ndash;&gt;-->
+<!--                <section>-->
+<!--                    <div class="hero-kicker">-->
+<!--                        <span>Portfolio Project</span>-->
+<!--                    </div>-->
+<!--                    <h1 class="hero-title">-->
+<!--                        Build & showcase your <span>football betting</span> platform.-->
+<!--                    </h1>-->
+<!--                    <p class="hero-subtitle">-->
+<!--                        Simulated betting system with real-world concepts: users, balance,-->
+<!--                        odds, bet settlement and clean domain logic, built with Spring Boot & Thymeleaf.-->
+<!--                    </p>-->
+
+<!--                    <div class="hero-cta">-->
+<!--                        <a class="btn btn-primary" th:href="@{/register}">-->
+<!--                            Get started-->
+<!--                        </a>-->
+<!--                        <a class="btn btn-outline" th:href="@{/matches}">-->
+<!--                            Browse matches-->
+<!--                        </a>-->
+<!--                    </div>-->
+
+<!--                    <div class="hero-meta">-->
+<!--                        <div class="hero-meta-item">-->
+<!--                            <span class="hero-meta-label">Tech stack</span>-->
+<!--                            <span class="hero-meta-value">Spring Boot · JPA · Thymeleaf</span>-->
+<!--                        </div>-->
+<!--                        <div class="hero-meta-item">-->
+<!--                            <span class="hero-meta-label">Focus</span>-->
+<!--                            <span class="hero-meta-value">Clean domain · UX-friendly UI</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </section>-->
+
+<!--                &lt;!&ndash; Right side: card &ndash;&gt;-->
+<!--                <aside>-->
+<!--                    <div class="hero-card">-->
+<!--                        <div class="hero-card-badge">-->
+<!--                            LIVE DEMO UI-->
+<!--                        </div>-->
+
+<!--                        <div class="hero-card-title">Today’s sample slip</div>-->
+<!--                        <div class="hero-card-value">-->
+<!--                            3.75<span style="font-size:0.8rem;font-weight:400;">&times; odds</span>-->
+<!--                        </div>-->
+<!--                        <div class="hero-card-sub">-->
+<!--                            Combine multiple bets into a single virtual slip and simulate real bookmaker logic.-->
+<!--                        </div>-->
+
+<!--                        <div class="hero-card-list">-->
+<!--                            <div>-->
+<!--                                <div class="hero-card-list-label">User balance</div>-->
+<!--                                <div class="hero-card-list-value">-->
+<!--                                    € 120.00-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="hero-card-list-label">Stake</div>-->
+<!--                                <div class="hero-card-list-value">-->
+<!--                                    € 10.00-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="hero-card-list-label">Potential win</div>-->
+<!--                                <div class="hero-card-list-value">-->
+<!--                                    € 37.50-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="hero-card-list-label">Status</div>-->
+<!--                                <div class="hero-card-list-value">-->
+<!--                                    Pending-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="hero-card-footer">-->
+<!--                            <div>-->
+<!--                                <div class="hero-pill">-->
+<!--                                    Clean domain-driven logic-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <span>Built as a hiring-ready portfolio project.</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </aside>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </main>-->
+
+<!--    &lt;!&ndash; Footer &ndash;&gt;-->
+<!--    <footer class="footer">-->
+<!--        <div class="container">-->
+<!--            Football Betting App · Spring Boot & Thymeleaf Demo-->
+<!--        </div>-->
+<!--    </footer>-->
+
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home · Football Betting App</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar за логнат потребител -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">
+                    FB
+                </div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Demo Portfolio Project</div>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a class="nav-link active" th:href="@{/home}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" th:href="@{/my-bets}">My Bets</a>
+                <!-- по-късно можеш да вържеш истинско logout действие -->
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Основно съдържание -->
+    <main class="hero">
+        <div class="container">
+
+            <!-- Горен ред: welcome + кратко инфо -->
+            <section style="margin-bottom: 1.8rem;">
+                <div class="hero-kicker">
+                    <span>Welcome back</span>
+                </div>
+                <h1 class="hero-title">
+                    Welcome,
+                    <span th:text="${user.username}">User</span>.
+                </h1>
+                <p class="hero-subtitle">
+                    This is your personal dashboard. Check your balance, open bets and upcoming matches,
+                    and manage your betting activity like in a real bookmaker app – but with virtual money.
+                </p>
+            </section>
+
+            <!-- Dashboard карти (баланс, open bets, total won) -->
+            <section style="margin-bottom: 2.2rem;">
+                <div class="hero-grid" style="gap:1.5rem; grid-template-columns: 2.1fr 1.2fr;">
+                    <!-- Лява част: три малки карти -->
+                    <div>
+                        <div style="display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:1rem;">
+
+                            <!-- Balance card -->
+                            <div class="hero-card" style="padding:1rem 1rem 0.9rem;">
+                                <div class="hero-card-title">Current balance</div>
+                                <div class="hero-card-value" style="font-size:1.4rem;">
+                                    € <span th:text="${#numbers.formatDecimal(user.balance, 1, 'COMMA', 2, 'POINT')}"
+                                >100.00</span>
+                                </div>
+                                <div class="hero-card-sub">
+                                    Use your demo balance to place bets on upcoming matches.
+                                </div>
+                            </div>
+
+                            <!-- Open bets card -->
+                            <div class="hero-card" style="padding:1rem 1rem 0.9rem;">
+                                <div class="hero-card-title">Open bets</div>
+                                <div class="hero-card-value" style="font-size:1.4rem;">
+                                    <span th:text="${openBetsCount}">0</span>
+                                </div>
+                                <div class="hero-card-sub">
+                                    Bets with status <strong>Pending</strong> waiting for match results.
+                                </div>
+                            </div>
+
+                            <!-- Total won card -->
+                            <div class="hero-card" style="padding:1rem 1rem 0.9rem;">
+                                <div class="hero-card-title">Total won</div>
+                                <div class="hero-card-value" style="font-size:1.4rem;">
+                                    € <span th:text="${#numbers.formatDecimal(totalWonAmount, 1, 'COMMA', 2, 'POINT')}"
+                                >0.00</span>
+                                </div>
+                                <div class="hero-card-sub">
+                                    Sum of all winning bets so far (lifetime winnings).
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Дясна част: „Quick actions“ карта -->
+                    <aside>
+                        <div class="hero-card">
+                            <div class="hero-card-badge">
+                                QUICK ACTIONS
+                            </div>
+                            <div class="hero-card-title">What would you like to do?</div>
+                            <div class="hero-card-sub" style="margin-bottom:0.9rem;">
+                                Navigate to the most common actions, just like modern betting apps:
+                            </div>
+
+                            <div class="hero-card-list" style="grid-template-columns: 1fr;">
+                                <div>
+                                    <div class="hero-card-list-label">Browse upcoming matches</div>
+                                    <div class="hero-card-list-value">
+                                        <a class="btn btn-primary" th:href="@{/matches}">
+                                            View matches & place a bet
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="hero-card-list-label">Review your slips</div>
+                                    <div class="hero-card-list-value">
+                                        <a class="btn btn-outline" th:href="@{/my-bets}">
+                                            Go to My Bets
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="hero-card-list-label">Top up demo balance</div>
+                                    <div class="hero-card-list-value">
+                                        <!-- по-късно можеш да вържеш action -->
+                                        <button type="button" class="btn btn-outline">
+                                            Add €50 demo money
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hero-card-footer">
+                                <div class="hero-pill">
+                                    No real money · Training only
+                                </div>
+                                <div>
+                                    Use this dashboard as a showcase for your Spring Boot skills.
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- Долен ред: Recent bets + Upcoming matches -->
+            <section style="display:grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1.4fr); gap:1.6rem;">
+
+                <!-- Recent bets -->
+                <div class="hero-card">
+                    <div class="hero-card-title">Recent bets</div>
+                    <div class="hero-card-sub">
+                        Last few bets placed with this account.
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(recentBets)}" style="margin-top:0.9rem; font-size:0.85rem; color:#9ca3af;">
+                        You haven't placed any bets yet. Go to <a th:href="@{/matches}" style="color:#22c55e;">Matches</a>
+                        and create your first slip.
+                    </div>
+
+                    <div th:if="${!#lists.isEmpty(recentBets)}" style="margin-top:0.9rem;">
+                        <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+                            <thead>
+                            <tr style="border-bottom:1px solid rgba(148,163,184,0.25); color:#9ca3af;">
+                                <th style="text-align:left; padding:0.35rem 0.3rem;">Match</th>
+                                <th style="text-align:left; padding:0.35rem 0.3rem;">Bet</th>
+                                <th style="text-align:right; padding:0.35rem 0.3rem;">Stake</th>
+                                <th style="text-align:right; padding:0.35rem 0.3rem;">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="bet : ${recentBets}"
+                                style="border-bottom:1px solid rgba(31,41,55,0.6);">
+                                <td style="padding:0.35rem 0.3rem;">
+                                    <span th:text="${bet.match.homeTeam.name}">Team A</span>
+                                    vs
+                                    <span th:text="${bet.match.awayTeam.name}">Team B</span>
+                                </td>
+                                <td style="padding:0.35rem 0.3rem;">
+                                    <span th:text="${bet.betType}">HOME_WIN</span>
+                                    @
+                                    <span th:text="${bet.odds}">2.10</span>
+                                </td>
+                                <td style="padding:0.35rem 0.3rem; text-align:right;">
+                                    € <span th:text="${bet.stake}">10.00</span>
+                                </td>
+                                <td style="padding:0.35rem 0.3rem; text-align:right;">
+                                    <span th:text="${bet.betStatus}">PENDING</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div style="margin-top:0.8rem; text-align:right;">
+                            <a class="form-link" th:href="@{/my-bets}">
+                                View all bets →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming matches -->
+                <div class="hero-card">
+                    <div class="hero-card-title">Upcoming matches</div>
+                    <div class="hero-card-sub">
+                        A quick look at the next fixtures you can bet on.
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(upcomingMatches)}" style="margin-top:0.9rem; font-size:0.85rem; color:#9ca3af;">
+                        No upcoming matches loaded yet. Make sure your Match seed/init is configured.
+                    </div>
+
+                    <div th:if="${!#lists.isEmpty(upcomingMatches)}" style="margin-top:0.9rem;">
+                        <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+                            <thead>
+                            <tr style="border-bottom:1px solid rgba(148,163,184,0.25); color:#9ca3af;">
+                                <th style="text-align:left; padding:0.35rem 0.3rem;">Match</th>
+                                <th style="text-align:left; padding:0.35rem 0.3rem;">Kick-off</th>
+                                <th style="text-align:right; padding:0.35rem 0.3rem;">Odds</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="match : ${upcomingMatches}"
+                                style="border-bottom:1px solid rgba(31,41,55,0.6);">
+                                <td style="padding:0.35rem 0.3rem;">
+                                    <span th:text="${match.homeTeam.name}">Team A</span>
+                                    vs
+                                    <span th:text="${match.awayTeam.name}">Team B</span>
+                                </td>
+                                <td style="padding:0.35rem 0.3rem;">
+                                    <span th:text="${#temporals.format(match.startTime, 'dd MMM, HH:mm')}">12 Dec, 20:00</span>
+                                </td>
+                                <td style="padding:0.35rem 0.3rem; text-align:right;">
+                                    <span th:text="${match.oddHome}">2.10</span> /
+                                    <span th:text="${match.oddDraw}">3.30</span> /
+                                    <span th:text="${match.oddAway}">3.60</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div style="margin-top:0.8rem; text-align:right;">
+                            <a class="btn btn-outline" th:href="@{/matches}">
+                                See all matches
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Logged-in home dashboard · show this page in interviews to demonstrate your domain & UI skills.
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
+

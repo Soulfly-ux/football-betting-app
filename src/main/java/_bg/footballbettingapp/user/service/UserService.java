@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -97,6 +98,11 @@ public class UserService {
     public User getUserById(UUID userId) {
         Optional<User> byId = userRepository.findById(userId);
         return byId.orElseThrow(() -> new DomainException("User not found"));
+    }
+
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public void save(User user) {

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register · Football Betting App</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">
+                    FB
+                </div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Demo Portfolio Project</div>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home.html}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="btn btn-outline" th:href="@{/login}">Log in</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <div class="auth-card">
+            <h1 class="auth-title">Create your account</h1>
+            <p class="auth-subtitle">
+                Set up a demo profile with virtual balance and start placing test bets.
+                Already have an account?
+                <a th:href="@{/login}">Log in</a>.
+            </p>
+
+            <!-- Пример за показване на глобална грешка -->
+            <div th:if="${errorMessage}" class="form-error" style="margin-bottom:0.7rem;">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <form th:action="@{/register}" method="POST" th:object="${registerRequest}">
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label class="form-label" for="username">Username</label>
+                        <input id="username" type="text" class="form-control"
+                               th:field="*{username}" autocomplete="username" required>
+                        <div class="form-error" th:if="${#fields.hasErrors('username')}"
+                             th:errors="*{username}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email</label>
+                        <input id="email" type="email" class="form-control"
+                               th:field="*{email}" autocomplete="email" required>
+                        <div class="form-error" th:if="${#fields.hasErrors('email')}"
+                             th:errors="*{email}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input id="password" type="password" class="form-control"
+                               th:field="*{password}" autocomplete="new-password" required>
+                        <div class="form-error" th:if="${#fields.hasErrors('password')}"
+                             th:errors="*{password}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="confirmPassword">Confirm password</label>
+                        <input id="confirmPassword" type="password" class="form-control"
+                               th:field="*{confirmPassword}" autocomplete="new-password" required>
+                        <div class="form-error" th:if="${#fields.hasErrors('confirmPassword')}"
+                             th:errors="*{confirmPassword}"></div>
+                    </div>
+
+                </div>
+
+                <div class="form-footer">
+                    <a class="form-link" th:href="@{/}">
+                        ← Back to home
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Create account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Demo registration – no real money, no real bets.
+        </div>
+    </footer>
+</div>
+</body>
+</html>
