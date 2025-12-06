@@ -5,6 +5,7 @@ import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.user.model.Role;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.repository.UserRepository;
+import _bg.footballbettingapp.web.dto.EditProfileRequest;
 import _bg.footballbettingapp.web.dto.LoginRequest;
 import _bg.footballbettingapp.web.dto.RegisterRequest;
 import jakarta.transaction.Transactional;
@@ -106,7 +107,61 @@ public class UserService {
     }
 
     public void save(User user) {
+
         userRepository.save(user);
     }
+
+
+
+   public User getUserByUsername(String username) {
+       return userRepository.findByUsername(username).orElseThrow(() -> new DomainException("User not found"));
+
+   }
+
+    public void deleteById(UUID userId) {
+        userRepository.deleteById(userId);
     }
+
+    public User getCurrentUser() {
+        return getUserByUsername("Svetozar");
+    }
+
+
+    public EditProfileRequest getCurrentUserProfile() {
+        User curentUser = getCurrentUser();
+
+
+        EditProfileRequest dto = new EditProfileRequest();
+        dto.setFirstName(curentUser.getFirstName());
+        dto.setLastName(curentUser.getLastName());
+        dto.setCountry(curentUser.getCountry());
+        dto.setProfilePictureUrl(curentUser.getProfilePictureUrl());
+
+
+        return dto;
+    }
+
+
+    public void editProfile(EditProfileRequest dto) {
+        User currentUser = getCurrentUser();
+
+        currentUser.setFirstName(dto.getFirstName());
+        currentUser.setLastName(dto.getLastName());
+        currentUser.setCountry(dto.getCountry());
+        currentUser.setProfilePictureUrl(dto.getProfilePictureUrl());
+        save(currentUser);
+    }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 

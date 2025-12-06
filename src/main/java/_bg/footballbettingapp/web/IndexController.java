@@ -35,8 +35,8 @@ public class IndexController {
     @GetMapping("/home")
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
-        User userById = userService.getUserById(UUID.fromString("80bc4e36-5fc5-4193-96b8-2a59ce9fbd06"));
-        modelAndView.addObject("user", userById);
+        User currentUser = userService.getCurrentUser();
+        modelAndView.addObject("user", currentUser);
         modelAndView.setViewName("home");
 
         return modelAndView;

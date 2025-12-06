@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit profile · Football Betting App</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar за логнат потребител -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">
+                    FB
+                </div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Demo Portfolio Project</div>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Dashboard</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" th:href="@{/my-bets}">My Bets</a>
+                <a class="nav-link active" th:href="@{/profile/edit}">Edit profile</a>
+                <!-- по-късно можеш да вържеш реален logout -->
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Основно съдържание -->
+    <main class="auth-page">
+        <div class="auth-card profile-card">
+            <div class="profile-header">
+                <div>
+                    <h1 class="auth-title">Edit your profile</h1>
+                    <p class="auth-subtitle">
+                        Update your personal details so they appear correctly on your dashboard and in your bets.
+                    </p>
+                </div>
+
+                <!-- Аватар / профилна снимка -->
+                <div class="profile-avatar-wrapper">
+                    <div class="profile-avatar-circle">
+                        <img th:if="${editProfileRequest.profilePictureUrl != null}"
+                             th:src="${editProfileRequest.profilePictureUrl}"
+                             alt="Profile picture"
+                             class="profile-avatar-img">
+                        <span th:if="${editProfileRequest.profilePictureUrl == null}">
+                            <!-- инициали, ако искаш да ги правиш по-късно -->
+                            U
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <form th:action="@{/users/edit}" th:object="${editProfileRequest}" method="post">
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label class="form-label" for="firstName">First name</label>
+                        <input id="firstName"
+                               type="text"
+                               class="form-control"
+                               th:field="*{firstName}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="lastName">Last name</label>
+                        <input id="lastName"
+                               type="text"
+                               class="form-control"
+                               th:field="*{lastName}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="country">Country</label>
+                        <select id="country"
+                                class="form-control"
+                                th:field="*{country}">
+                            <!-- Placeholder – ще бъде избран, когато country е null -->
+                            <option value="" disabled>
+                                Select country
+                            </option>
+
+                            <option th:each="c : ${countries}"
+                                    th:value="${c}"
+                                    th:text="${c}">
+                            </option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-label" for="profileImageUrl">Profile image URL</label>
+                        <input id="profileImageUrl"
+                               type="text"
+                               class="form-control"
+                               th:field="*{profilePictureUrl}">
+                        <small style="font-size:0.75rem; color:#9ca3af;">
+                            Paste a direct image URL (e.g. from Imgur or another hosting). File upload може по-късно.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="profile-preview-row" th:if="${editProfileRequest.profilePictureUrl != null}">
+                    <span class="profile-preview-label">Preview</span>
+                    <div class="profile-preview-img-wrapper">
+                        <img th:src="${editProfileRequest.profilePictureUrl}"
+                             alt="Profile preview"
+                             class="profile-preview-img">
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <a class="form-link" th:href="@{/home}">
+                        ← Back to dashboard
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Save changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Profile settings · Keep your data up to date.
+        </div>
+    </footer>
+</div>
+</body>
+</html>
