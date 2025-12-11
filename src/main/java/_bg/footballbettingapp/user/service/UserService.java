@@ -123,13 +123,14 @@ public class UserService {
     }
 
     public User getCurrentUser() {
-        return getUserByUsername("Svetozar");
+        return getUserByUsername("Ricardo");
     }
 
 
     public EditProfileRequest getCurrentUserProfile() {
         User curentUser = getCurrentUser();
 
+        // този метод може и да се направи с помоща на mapper class
 
         EditProfileRequest dto = new EditProfileRequest();
         dto.setFirstName(curentUser.getFirstName());

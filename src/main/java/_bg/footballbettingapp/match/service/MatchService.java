@@ -67,4 +67,12 @@ public class MatchService {
     }
 
 
+    public long countMatches() {
+        return matchRepository.count();
+    }
+
+    public void save(Match match) {
+        matchRepository.save(match);
+    }
+
 }

@@ -2,10 +2,13 @@ package _bg.footballbettingapp.web;
 
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
+import _bg.footballbettingapp.web.dto.LoginRequest;
 import _bg.footballbettingapp.web.dto.RegisterRequest;
 import ch.qos.logback.core.model.Model;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,11 +47,35 @@ public class IndexController {
 
 
     @GetMapping("/login")
-    public String login() {
-        return "login";
+    public ModelAndView login() {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        modelAndView.addObject("loginRequest", new LoginRequest());
+
+        return modelAndView;
     }
+
+    @PostMapping("/login")
+    public ModelAndView login(@Valid LoginRequest loginRequest, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return new ModelAndView("login");
+        }
+
+        User loggedInUser = userService.login(loginRequest);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user", loggedInUser);
+        modelAndView.setViewName("redirect:/home");
+
+        return modelAndView;
+    }
+
+
+
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("registerRequest", new RegisterRequest());
         modelAndView.setViewName("register");
@@ -57,9 +84,18 @@ public class IndexController {
     }
 
     @PostMapping ("/register")
-    public String register(@ModelAttribute RegisterRequest registerRequest) {
-       userService.register(registerRequest);
-        return "redirect:/home";
+    public ModelAndView register(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return new ModelAndView("register");
+        }
+
+        User registeredUser = userService.register(registerRequest);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user", registeredUser);
+        modelAndView.setViewName("home");
+        return modelAndView;
     }
 
 

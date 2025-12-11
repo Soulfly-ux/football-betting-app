@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <form th:action="@{/users/edit}" th:object="${editProfileRequest}" method="post">
+            <form th:action="@{/users/edit}" th:object="${editProfileRequest}" th:method="PUT">
                 <div class="form-grid">
 
                     <div class="form-group">
@@ -86,9 +86,9 @@
                                 Select country
                             </option>
 
-                            <option th:each="c : ${countries}"
-                                    th:value="${c}"
-                                    th:text="${c}">
+                            <option th:each="c : ${T(_bg.footballbettingapp.common.model.Country).values()}"
+                                    th:value="${c.name()}"
+                                    th:text="${c.displayName}">
                             </option>
                         </select>
                     </div>

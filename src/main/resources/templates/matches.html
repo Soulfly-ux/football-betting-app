@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Matches · Football Betting App</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">
+                    FB
+                </div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Demo Portfolio Project</div>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Dashboard</a>
+                <a class="nav-link active" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" th:href="@{/my-bets}">My Bets</a>
+                <a class="nav-link" th:href="@{/profile/edit}">Edit profile</a>
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="hero">
+        <div class="container">
+
+            <section style="margin-bottom: 1.5rem;">
+                <div class="hero-kicker">
+                    <span>Upcoming matches</span>
+                </div>
+                <h1 class="hero-title">
+                    Available fixtures to bet on
+                </h1>
+                <p class="hero-subtitle">
+                    Browse upcoming games, check the odds and create your betting slips.
+                </p>
+            </section>
+
+            <section class="hero-card">
+                <div class="hero-card-title">Matches</div>
+                <div class="hero-card-sub">
+                    All scheduled matches with available odds.
+                </div>
+
+                <!-- Ако няма мачове -->
+                <div th:if="${#lists.isEmpty(matches)}"
+                     style="margin-top: 1rem; font-size: 0.85rem; color: #9ca3af;">
+                    There are no upcoming matches at the moment.
+                    Check back later or add some via the admin panel.
+                </div>
+
+                <!-- Ако има мачове -->
+                <div th:if="${!#lists.isEmpty(matches)}" style="margin-top: 1rem; overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                        <thead>
+                        <tr style="border-bottom:1px solid rgba(148,163,184,0.4); color:#9ca3af;">
+                            <th style="text-align:left; padding:0.5rem 0.4rem;">Kick-off</th>
+                            <th style="text-align:left; padding:0.5rem 0.4rem;">Match</th>
+                            <th style="text-align:center; padding:0.5rem 0.4rem;">1</th>
+                            <th style="text-align:center; padding:0.5rem 0.4rem;">X</th>
+                            <th style="text-align:center; padding:0.5rem 0.4rem;">2</th>
+                            <th style="text-align:right; padding:0.5rem 0.4rem;">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="match : ${matches}"
+                            style="border-bottom:1px solid rgba(31,41,55,0.7);">
+                            <td style="padding:0.55rem 0.4rem;">
+                                <span th:text="${#temporals.format(match.startTime, 'dd MMM yyyy, HH:mm')}">
+                                    12 Dec 2025, 20:00
+                                </span>
+                            </td>
+                            <td style="padding:0.55rem 0.4rem;">
+                                <span th:text="${match.homeTeam.name}">Team A</span>
+                                <span style="color:#6b7280;">vs</span>
+                                <span th:text="${match.awayTeam.name}">Team B</span>
+                            </td>
+                            <td style="padding:0.55rem 0.4rem; text-align:center;">
+                                <span th:text="${match.oddHome}">2.10</span>
+                            </td>
+                            <td style="padding:0.55rem 0.4rem; text-align:center;">
+                                <span th:text="${match.oddDraw}">3.30</span>
+                            </td>
+                            <td style="padding:0.55rem 0.4rem; text-align:center;">
+                                <span th:text="${match.oddAway}">3.60</span>
+                            </td>
+                            <td style="padding:0.55rem 0.4rem; text-align:right;">
+                                <a class="btn btn-primary btn-sm"
+                                   th:href="@{|/matches/${match.id}/bet|}">
+                                    Bet
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Matches view · Next step: connect it with a bet form.
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
