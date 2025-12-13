@@ -125,6 +125,7 @@ public class MatchInit implements CommandLineRunner {
 
 
     private void seedMatch(Match match) {
+
         boolean existed = matchRepository.existsByHomeTeamAndAwayTeamAndStartTime(
                 match.getHomeTeam(),
                 match.getAwayTeam(),
@@ -132,6 +133,15 @@ public class MatchInit implements CommandLineRunner {
 
         if (!existed) {
             matchService.save(match);
+            System.out.println("Seeded match: "
+                    + match.getHomeTeam().getName() + " vs "
+                    + match.getAwayTeam().getName() + " at "
+                    + match.getStartTime());
+        } else {
+            System.out.println("Skipped existing match: "
+                    + match.getHomeTeam().getName() + " vs "
+                    + match.getAwayTeam().getName() + " at "
+                    + match.getStartTime());
         }
     }
 }
