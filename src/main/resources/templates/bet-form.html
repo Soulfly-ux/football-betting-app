@@ -100,6 +100,8 @@
 <!--                    </div>-->
                 </div>
 
+
+
                 <!-- Форма за залог -->
                 <form class="bet-form"
                       th:object="${betRequest}"
@@ -163,6 +165,12 @@
                                min="0.10"
                                class="form-control"
                                th:field="*{stake}">
+<!--                        <p th:if="${errorMessage != null}" th:text="${errorMessage}"></p>-->
+                        <div th:if="${errorMessage != null}"
+                             class="form-error-global">
+                            <span th:text="${errorMessage}">Not enough balance</span>
+                        </div>
+
                         <small style="font-size:0.75rem; color:#9ca3af;">
 
                         </small>

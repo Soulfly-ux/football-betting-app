@@ -5,6 +5,7 @@ import _bg.footballbettingapp.bet.model.BetStatus;
 import _bg.footballbettingapp.bet.model.BetType;
 import _bg.footballbettingapp.bet.repository.BetRepository;
 import _bg.footballbettingapp.exception.DomainException;
+import _bg.footballbettingapp.exception.InsufficientBalanceException;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.model.MatchStatus;
 import _bg.footballbettingapp.match.service.MatchService;
@@ -41,7 +42,7 @@ public class BetService {
 
 
         validateStake(stake);
-        validateUserCanBet(user, stake);
+        validateUserCanBet(user, stake, matchId);
         validateMatchCanBeBetOn(match);
 
 
@@ -82,7 +83,7 @@ public class BetService {
     }
 
 
-    public void validateUserCanBet(User user, BigDecimal stake) {
+    public void validateUserCanBet(User user, BigDecimal stake, UUID matchId) {
 
         if(user == null) {
 
@@ -90,8 +91,9 @@ public class BetService {
         }
 
         if(user.getBalance().compareTo(stake) < 0) {
-
-            throw new DomainException("User does not have enough balance");
+            System.out.println(">>> THROWING InsufficientBalanceException, balance="
+                    + user.getBalance() + ", stake=" + stake);
+            throw new InsufficientBalanceException("Not enough balance to place this bet", matchId);
         }
 
         if (!user.isActive()) {

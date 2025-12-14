@@ -43,6 +43,7 @@ public class BetController {
             modelAndView.setViewName("bet-form");
             modelAndView.addObject("match", matchById);
             modelAndView.addObject("betRequest", betRequest);
+            modelAndView.addObject("errorMessage", null);
             return modelAndView;
         }
 

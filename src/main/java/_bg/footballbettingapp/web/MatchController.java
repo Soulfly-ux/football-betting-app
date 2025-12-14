@@ -47,6 +47,7 @@ public class MatchController {
         betRequest.setMatchId(id);// сетвам задължително, зашото ид не се подава от потребител, то е скрито поле, ако не го направя ще хвърли грешка
         modelAndView.addObject("betRequest",betRequest);
         modelAndView.addObject("match", matchById);
+        modelAndView.addObject("errorMessage", null);
 
         return modelAndView;
     }
