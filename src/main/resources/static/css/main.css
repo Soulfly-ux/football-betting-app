@@ -690,4 +690,23 @@ body {
         }
     }
 
+    .bet-type-option {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem; /* ето ти разстояние */
+        padding: 0.3rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        font-size: 0.8rem;
+    }
+
+    .bet-type-odd {
+        font-weight: 600;
+    }
+
+    .bet-type-separator {
+        color: #6b7280;
+    }
+
+
 }

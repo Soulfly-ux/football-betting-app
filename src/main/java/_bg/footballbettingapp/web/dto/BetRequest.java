@@ -5,6 +5,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -21,5 +22,5 @@ public class BetRequest {
     private BetType betType;
     @NotNull
     @DecimalMin(value = "0.10", message = "Stake must be at least 0.10")
-    private int stake;
+    private BigDecimal stake;
 }

@@ -23,9 +23,9 @@
             <nav class="nav-links">
                 <a class="nav-link" th:href="@{/home}">Home</a>
                 <a class="nav-link" th:href="@{/matches}">Matches</a>
-                <a class="nav-link" th:href="">My Bets</a>
+                <a class="nav-link" th:href="@{/my-bets}">My Bets</a>
                 <a class="nav-link" th:href="@{/users/edit}">Edit profile</a>
-                <a class="btn btn-outline" th:href="">Logout</a>
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
             </nav>
         </div>
     </header>
@@ -58,56 +58,56 @@
                 <div class="bet-match-info">
                     <div class="bet-league-row">
                         <span class="badge-league"
-                              th:text="">
+                              th:text="${match.leagueName}">
                             Premier League
                         </span>
                     </div>
                     <div class="bet-teams-row">
-                        <span class="bet-team-name" th:text="">
+                        <span class="bet-team-name" th:text="${match.homeTeam.name}">
                             Home Team
                         </span>
                         <span class="bet-vs">vs</span>
-                        <span class="bet-team-name" th:text="">
+                        <span class="bet-team-name" th:text="${match.awayTeam.name}">
                             Away Team
                         </span>
                     </div>
                     <div class="bet-meta-row">
                         <span class="bet-kickoff-label">Kick-off:</span>
                         <span class="bet-kickoff-value"
-                              th:text="">
+                              th:text="${#temporals.format(match.startTime, 'dd MMM yyyy, HH:mm')}">
                             12 Dec 2025, 20:00
                         </span>
                     </div>
-                    <div class="bet-odds-row">
-                        <div class="bet-odd-box">
-                            <span class="bet-odd-label">1</span>
-                            <span class="bet-odd-value" th:text="">
-                                2.10
-                            </span>
-                        </div>
-                        <div class="bet-odd-box">
-                            <span class="bet-odd-label">X</span>
-                            <span class="bet-odd-value" th:text="">
-                                3.30
-                            </span>
-                        </div>
-                        <div class="bet-odd-box">
-                            <span class="bet-odd-label">2</span>
-                            <span class="bet-odd-value" th:text="">
-                                3.60
-                            </span>
-                        </div>
-                    </div>
+<!--                    <div class="bet-odds-row">-->
+<!--                        <div class="bet-odd-box">-->
+<!--                            <span class="bet-odd-label">1  </span>-->
+<!--                            <span class="bet-odd-value" th:text="${match.oddHome}">-->
+<!--                                2.10-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                        <div class="bet-odd-box">-->
+<!--                            <span class="bet-odd-label">X  </span>-->
+<!--                            <span class="bet-odd-value" th:text="${match.oddDraw}">-->
+<!--                                3.30-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                        <div class="bet-odd-box">-->
+<!--                            <span class="bet-odd-label">2  </span>-->
+<!--                            <span class="bet-odd-value" th:text="${match.oddAway}">-->
+<!--                                3.60-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
 
                 <!-- Форма за залог -->
                 <form class="bet-form"
-                      th:object=""
-                      th:action=""
+                      th:object="${betRequest}"
+                      th:action="@{/bets}"
                       method="post">
 
                     <!-- Скрит matchId -->
-                    <input type="hidden" th:field="">
+                    <input type="hidden" th:field="*{matchId}">
 
                     <!-- Избор на betType -->
                     <div class="form-group">
@@ -116,38 +116,55 @@
                             <label class="bet-type-option">
                                 <input type="radio"
                                        class="bet-type-radio"
-                                       th:field=""
-                                       value="">
-                                <span>1 (Home win)</span>
+                                       th:field="*{betType}"
+                                       value="HOME_WIN">
+
+                                <span>1 </span>
+                                <span class="bet-type-separator">·</span>
+                                <span class="bet-type-odd" th:text="${match.oddHome}">
+
+    </span>
                             </label>
                             <label class="bet-type-option">
                                 <input type="radio"
                                        class="bet-type-radio"
-                                       th:field=""
-                                       value="">
-                                <span>X (Draw)</span>
+                                       th:field="*{betType}"
+                                       value="DRAW">
+
+                                <span>X </span>
+                                <span class="bet-type-separator">·</span>
+                                <span class="bet-type-odd" th:text="${match.oddDraw}">
+
+    </span>
                             </label>
                             <label class="bet-type-option">
                                 <input type="radio"
                                        class="bet-type-radio"
-                                       th:field=""
-                                       value="">
-                                <span>2 (Away win)</span>
+                                       th:field="*{betType}"
+                                       value="AWAY_WIN">
+
+                                <span>2 </span>
+                                <span class="bet-type-separator">·</span>
+                                <span class="bet-type-odd" th:text="${match.oddAway}">
+
+    </span>
                             </label>
                         </div>
                     </div>
 
                     <!-- Stake -->
+
+
                     <div class="form-group">
-                        <label class="form-label" for="stake">Stake</label>
+                        <label class="form-label" for="stake"> Your Stake</label>
                         <input id="stake"
                                type="number"
                                step="0.01"
-                               min="1"
+                               min="0.10"
                                class="form-control"
-                               th:field="">
+                               th:field="*{stake}">
                         <small style="font-size:0.75rem; color:#9ca3af;">
-                            Minimum stake may be 1.00 (adjust in validation).
+
                         </small>
                     </div>
 
@@ -164,7 +181,7 @@
 
                     <!-- Footer на формата -->
                     <div class="form-footer">
-                        <a class="form-link" th:href="">
+                        <a class="form-link" th:href="@{/matches}">
                             ← Back to matches
                         </a>
                         <button type="submit" class="btn btn-primary">
