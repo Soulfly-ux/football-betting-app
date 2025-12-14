@@ -1,6 +1,8 @@
 package _bg.footballbettingapp.web.dto;
 
 import _bg.footballbettingapp.bet.model.BetType;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.UUID;
@@ -13,7 +15,11 @@ import java.util.UUID;
 @Getter
 public class BetRequest {
 
+    @NotNull
     private UUID matchId;
+    @NotNull
     private BetType betType;
-    private int amount;
+    @NotNull
+    @DecimalMin(value = "0.10", message = "Stake must be at least 0.10")
+    private int stake;
 }

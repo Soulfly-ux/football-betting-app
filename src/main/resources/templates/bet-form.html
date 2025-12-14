@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Place bet · Football Betting App</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">
+                    FB
+                </div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Demo Portfolio Project</div>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" th:href="">My Bets</a>
+                <a class="nav-link" th:href="@{/users/edit}">Edit profile</a>
+                <a class="btn btn-outline" th:href="">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="hero">
+        <div class="container">
+
+            <!-- Заглавие -->
+            <section style="margin-bottom: 1.5rem;">
+                <div class="hero-kicker">
+                    <span>Bet slip</span>
+                </div>
+                <h1 class="hero-title">
+                    Place your bet
+                </h1>
+                <p class="hero-subtitle">
+                    Review the match details and confirm your stake.
+                </p>
+            </section>
+
+            <!-- Карта с мач + форма -->
+            <section class="hero-card">
+                <div class="hero-card-title">Match details</div>
+                <div class="hero-card-sub">
+                    Confirm the game and choose your bet.
+                </div>
+
+                <!-- Инфо за мача -->
+                <div class="bet-match-info">
+                    <div class="bet-league-row">
+                        <span class="badge-league"
+                              th:text="">
+                            Premier League
+                        </span>
+                    </div>
+                    <div class="bet-teams-row">
+                        <span class="bet-team-name" th:text="">
+                            Home Team
+                        </span>
+                        <span class="bet-vs">vs</span>
+                        <span class="bet-team-name" th:text="">
+                            Away Team
+                        </span>
+                    </div>
+                    <div class="bet-meta-row">
+                        <span class="bet-kickoff-label">Kick-off:</span>
+                        <span class="bet-kickoff-value"
+                              th:text="">
+                            12 Dec 2025, 20:00
+                        </span>
+                    </div>
+                    <div class="bet-odds-row">
+                        <div class="bet-odd-box">
+                            <span class="bet-odd-label">1</span>
+                            <span class="bet-odd-value" th:text="">
+                                2.10
+                            </span>
+                        </div>
+                        <div class="bet-odd-box">
+                            <span class="bet-odd-label">X</span>
+                            <span class="bet-odd-value" th:text="">
+                                3.30
+                            </span>
+                        </div>
+                        <div class="bet-odd-box">
+                            <span class="bet-odd-label">2</span>
+                            <span class="bet-odd-value" th:text="">
+                                3.60
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Форма за залог -->
+                <form class="bet-form"
+                      th:object=""
+                      th:action=""
+                      method="post">
+
+                    <!-- Скрит matchId -->
+                    <input type="hidden" th:field="">
+
+                    <!-- Избор на betType -->
+                    <div class="form-group">
+                        <label class="form-label">Bet type</label>
+                        <div class="bet-type-options">
+                            <label class="bet-type-option">
+                                <input type="radio"
+                                       class="bet-type-radio"
+                                       th:field=""
+                                       value="">
+                                <span>1 (Home win)</span>
+                            </label>
+                            <label class="bet-type-option">
+                                <input type="radio"
+                                       class="bet-type-radio"
+                                       th:field=""
+                                       value="">
+                                <span>X (Draw)</span>
+                            </label>
+                            <label class="bet-type-option">
+                                <input type="radio"
+                                       class="bet-type-radio"
+                                       th:field=""
+                                       value="">
+                                <span>2 (Away win)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Stake -->
+                    <div class="form-group">
+                        <label class="form-label" for="stake">Stake</label>
+                        <input id="stake"
+                               type="number"
+                               step="0.01"
+                               min="1"
+                               class="form-control"
+                               th:field="">
+                        <small style="font-size:0.75rem; color:#9ca3af;">
+                            Minimum stake may be 1.00 (adjust in validation).
+                        </small>
+                    </div>
+
+                    <!-- Потенциална печалба – за сега текст -->
+                    <div class="form-group">
+                        <label class="form-label">Potential win</label>
+                        <div class="bet-potential">
+                            <!-- по-късно можеш да изчисляваш на FE или просто да показваш текст -->
+                            <span style="font-size:0.85rem; color:#9ca3af;">
+                                Will be calculated after placing the bet.
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Footer на формата -->
+                    <div class="form-footer">
+                        <a class="form-link" th:href="">
+                            ← Back to matches
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            Place bet
+                        </button>
+                    </div>
+                </form>
+
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Bet form · Review your bet before confirming.
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

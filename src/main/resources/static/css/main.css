@@ -571,4 +571,123 @@ body {
         height: 56px;
         font-size: 1.2rem;
     }
+
+    .bet-match-info {
+        margin-top: 1rem;
+        margin-bottom: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .bet-league-row {
+        margin-bottom: 0.2rem;
+    }
+
+    .badge-league {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.12rem 0.45rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #e5e7eb;
+        background: rgba(15, 23, 42, 0.85);
+    }
+
+    .bet-teams-row {
+        font-size: 1.05rem;
+        font-weight: 500;
+    }
+
+    .bet-team-name {
+        color: #e5e7eb;
+    }
+
+    .bet-vs {
+        margin: 0 0.35rem;
+        color: #6b7280;
+    }
+
+    .bet-meta-row {
+        font-size: 0.8rem;
+        color: #9ca3af;
+    }
+
+    .bet-kickoff-label {
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 0.7rem;
+        margin-right: 0.4rem;
+    }
+
+    .bet-odds-row {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.4rem;
+    }
+
+    .bet-odd-box {
+        flex: 1;
+        padding: 0.45rem 0.6rem;
+        border-radius: 0.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(15, 23, 42, 0.85);
+        display: flex;
+        flex-direction: column;
+        gap: 0.18rem;
+        align-items: flex-start;
+    }
+
+    .bet-odd-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: #9ca3af;
+    }
+
+    .bet-odd-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    .bet-form {
+        margin-top: 1.2rem;
+    }
+
+    .bet-type-options {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .bet-type-option {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.3rem 0.5rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        font-size: 0.8rem;
+    }
+
+    .bet-type-radio {
+        accent-color: #22c55e;
+    }
+
+    .bet-potential {
+        padding: 0.4rem 0.6rem;
+        border-radius: 0.6rem;
+        border: 1px dashed rgba(148, 163, 184, 0.5);
+        background: rgba(15, 23, 42, 0.7);
+    }
+
+    @media (max-width: 640px) {
+        .bet-odds-row {
+            flex-direction: column;
+        }
+    }
+
 }
