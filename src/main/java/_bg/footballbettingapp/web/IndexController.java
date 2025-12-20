@@ -5,6 +5,7 @@ import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.LoginRequest;
 import _bg.footballbettingapp.web.dto.RegisterRequest;
 import ch.qos.logback.core.model.Model;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,15 +36,6 @@ public class IndexController {
 
     }
 
-    @GetMapping("/home")
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        User currentUser = userService.getCurrentUser();
-        modelAndView.addObject("user", currentUser);
-        modelAndView.setViewName("home");
-
-        return modelAndView;
-    }
 
 
     @GetMapping("/login")
@@ -57,13 +49,14 @@ public class IndexController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(@Valid LoginRequest loginRequest, BindingResult bindingResult) {
+    public ModelAndView login(@Valid LoginRequest loginRequest, BindingResult bindingResult, HttpSession session) {
 
         if(bindingResult.hasErrors()) {
             return new ModelAndView("login");
         }
 
         User loggedInUser = userService.login(loginRequest);
+        session.setAttribute("user", loggedInUser.getId());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user", loggedInUser);
         modelAndView.setViewName("redirect:/home");
@@ -92,9 +85,24 @@ public class IndexController {
 
         User registeredUser = userService.register(registerRequest);
 
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user", registeredUser);
         modelAndView.setViewName("home");
+        return modelAndView;
+    }
+
+
+    @GetMapping("/home")
+    public ModelAndView home(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        UUID userId = (UUID) session.getAttribute("user");
+        User currentUser = userService.getUserById(userId);
+
+        modelAndView.addObject("user", currentUser);
+        modelAndView.setViewName("home");
+
         return modelAndView;
     }
 
