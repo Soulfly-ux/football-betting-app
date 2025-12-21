@@ -8,6 +8,7 @@ import _bg.footballbettingapp.user.repository.UserRepository;
 import _bg.footballbettingapp.web.dto.EditProfileRequest;
 import _bg.footballbettingapp.web.dto.LoginRequest;
 import _bg.footballbettingapp.web.dto.RegisterRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,35 +123,37 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public User getCurrentUser() {
-        return getUserByUsername("Ricardo");
+    public User getCurrentUser(HttpSession session) {
+        UUID userId = (UUID) session.getAttribute("user");
+
+        return getUserById(userId);
     }
 
 
-    public EditProfileRequest getCurrentUserProfile() {
-        User curentUser = getCurrentUser();
+    public EditProfileRequest getCurrentUserProfile(UUID userId) {
+        User user = getUserById(userId);
 
         // този метод може и да се направи с помоща на mapper class
 
         EditProfileRequest dto = new EditProfileRequest();
-        dto.setFirstName(curentUser.getFirstName());
-        dto.setLastName(curentUser.getLastName());
-        dto.setCountry(curentUser.getCountry());
-        dto.setProfilePictureUrl(curentUser.getProfilePictureUrl());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setCountry(user.getCountry());
+        dto.setProfilePictureUrl(user.getProfilePictureUrl());
 
 
         return dto;
     }
 
 
-    public void editProfile(EditProfileRequest dto) {
-        User currentUser = getCurrentUser();
+    public void editProfile(EditProfileRequest dto, UUID userId) {
+        User user = getUserById(userId);
 
-        currentUser.setFirstName(dto.getFirstName());
-        currentUser.setLastName(dto.getLastName());
-        currentUser.setCountry(dto.getCountry());
-        currentUser.setProfilePictureUrl(dto.getProfilePictureUrl());
-        save(currentUser);
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setCountry(dto.getCountry());
+        user.setProfilePictureUrl(dto.getProfilePictureUrl());
+        save(user);
     }
 
     }

@@ -86,10 +86,10 @@ public class IndexController {
         User registeredUser = userService.register(registerRequest);
 
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("user", registeredUser);
-        modelAndView.setViewName("home");
-        return modelAndView;
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("user", registeredUser);
+//        modelAndView.setViewName("home");
+        return new ModelAndView("redirect:/login");
     }
 
 

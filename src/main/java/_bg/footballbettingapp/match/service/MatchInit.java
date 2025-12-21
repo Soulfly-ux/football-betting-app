@@ -66,7 +66,7 @@ public class MatchInit implements CommandLineRunner {
         match2.setAwayTeam(atleticoMadrid);
         match2.setLeagueName("Champions League");
         match2.setMatchStatus(MatchStatus.SCHEDULED);
-        match2.setStartTime(base.plusDays(2));
+        match2.setStartTime(base.plusDays(1));
         match2.setOddHome(new BigDecimal("2.10"));
         match2.setOddDraw(new BigDecimal("2.50"));
         match2.setOddAway(new BigDecimal("2.20"));

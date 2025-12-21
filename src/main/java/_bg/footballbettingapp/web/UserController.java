@@ -1,13 +1,17 @@
 package _bg.footballbettingapp.web;
 
 import _bg.footballbettingapp.common.model.Country;
+import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.EditProfileRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/users")
@@ -20,8 +24,11 @@ public class UserController {
     }
 
     @GetMapping("/edit")
-    public ModelAndView getEditProfilePage() {
-        EditProfileRequest editProfileRequest = userService.getCurrentUserProfile();
+    public ModelAndView getEditProfilePage(HttpSession session) {
+
+        UUID userId = (UUID) session.getAttribute("user");
+        User currentUser = userService.getUserById(userId);
+        EditProfileRequest editProfileRequest = userService.getCurrentUserProfile(userId);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("editProfileRequest", editProfileRequest);
@@ -33,7 +40,10 @@ public class UserController {
     }
 
     @PutMapping("/edit")
-    public ModelAndView editProfile(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult) {
+    public ModelAndView editProfile(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, HttpSession session) {
+
+        UUID userId = (UUID) session.getAttribute("user");
+
 
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView();
@@ -46,7 +56,9 @@ public class UserController {
 
         }
 
-        userService.editProfile(editProfileRequest);
+
+
+        userService.editProfile(editProfileRequest, userId);
         return new ModelAndView("redirect:/home");
     }
 }

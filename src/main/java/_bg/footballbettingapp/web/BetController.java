@@ -6,6 +6,7 @@ import _bg.footballbettingapp.match.service.MatchService;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.BetRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/bets")
@@ -33,7 +35,11 @@ public class BetController {
     }
 
     @PostMapping
-    public ModelAndView placeBet(@Valid BetRequest betRequest, BindingResult bindingResult) {
+    public ModelAndView placeBet(@Valid BetRequest betRequest, BindingResult bindingResult, HttpSession session) {
+
+
+        UUID userId = (UUID) session.getAttribute("user");
+
 
         if (bindingResult.hasErrors()) {
             Match matchById = matchService.getMatchById(betRequest.getMatchId());
@@ -47,8 +53,8 @@ public class BetController {
             return modelAndView;
         }
 
+        User currentUser = userService.getUserById(userId);
 
-        User currentUser = userService.getCurrentUser();
 
         betService.placeBet(
                 currentUser.getId(),
