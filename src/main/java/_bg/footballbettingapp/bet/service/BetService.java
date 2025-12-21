@@ -70,8 +70,12 @@ public class BetService {
     }
 
 
-    public List<Bet> getBetsByUser(UUID userId) {
-        User user = userService.getUserById(userId);
+//    public List<Bet> getBetsByUser(UUID userId) {
+//        User user = userService.getUserById(userId);
+//        return betRepository.findAllByUserOrderByCreatedOnDesc(user);
+//    }
+
+    public List<Bet> getBetsByUser(User user) {
         return betRepository.findAllByUserOrderByCreatedOnDesc(user);
     }
 

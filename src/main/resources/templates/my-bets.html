@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Bets · Football Betting App</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">FB</div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Portfolio Demo</div>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link active" th:href="@{/my-bets}">My Bets</a>
+                <a class="nav-link" th:href="@{/users/edit}">Edit profile</a>
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+
+            <!-- Header -->
+            <section class="hero-card" style="margin-bottom: 1rem;">
+                <div class="hero-card-title">My Bets</div>
+                <div class="hero-card-sub">
+                    History of your bets and their status.
+                </div>
+
+                <div class="bets-summary">
+                    <div class="bets-summary-item">
+                        <div class="bets-summary-label">User</div>
+                        <div class="bets-summary-value" th:text="${user.username}">
+
+                        </div>
+                    </div>
+                    <div class="bets-summary-item">
+                        <div class="bets-summary-label">Balance</div>
+                        <div class="bets-summary-value" th:text="${user.balance + ' €'}">
+                        </div>
+                    </div>
+                    <div class="bets-summary-item">
+                        <div class="bets-summary-label">Total bets</div>
+                        <div class="bets-summary-value" th:text="${bets.size()}">
+                            5
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Empty state -->
+            <section class="hero-card"
+                     th:if="${bets.isEmpty()}">
+                <div class="empty-state">
+                    <div class="empty-state-title">No bets yet</div>
+                    <div class="empty-state-sub">Go to matches and place your first bet.</div>
+                    <a class="btn btn-primary" th:href="@{/matches}">
+                        Browse matches
+                    </a>
+                </div>
+            </section>
+
+            <!-- Bets table -->
+            <section class="hero-card"
+                     th:if="${!bets.isEmpty()}">
+                <div class="table-wrap">
+                    <table class="bets-table">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Match</th>
+                            <th>League</th>
+                            <th>Type</th>
+                            <th>Stake</th>
+                            <th>Odds</th>
+                            <th>Potential win</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="bet : ${bets}">
+                            <td class="muted" th:text="${#temporals.format(bet.createdOn, 'dd MMM yyyy, HH:mm')}">
+
+                            </td>
+
+                            <td>
+                                <div class="match-cell">
+                                    <span class="team" th:text="${bet.match.homeTeam.name}">Arsenal</span>
+                                    <span class="vs">vs</span>
+                                    <span class="team" th:text="${bet.match.awayTeam.name}">Chelsea</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="badge-league" th:text="${bet.match.leagueName}">
+                                    Premier League
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge-type" th:text="${bet.betType}">
+
+                                </span>
+                            </td>
+
+                            <td th:text="${bet.stake}">
+                                10.00
+                            </td>
+
+                            <td th:text="${bet.odds}">
+                                2.10
+                            </td>
+
+                            <td th:text="${bet.potentialWinningAmount}">
+                                21.00
+                            </td>
+
+                            <td>
+                             <span class="badge-status"
+                                   th:text="${bet.betStatus}"
+                                   th:classappend="${bet.betStatus.name() == 'WON' ? ' badge-status--won'
+                    : (bet.betStatus.name() == 'LOST' ? ' badge-status--lost'
+                    : ' badge-status--pending')}">
+    PENDING
+</span>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-footer" style="margin-top: 1rem;">
+                    <a class="form-link" th:href="@{/matches}">
+                        ← Back to matches
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            My Bets · Track your betting history.
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
