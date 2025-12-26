@@ -1,5 +1,6 @@
 package _bg.footballbettingapp.web;
 
+import _bg.footballbettingapp.bet.model.Bet;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.service.MatchService;
 import _bg.footballbettingapp.web.dto.BetRequest;
@@ -40,6 +41,7 @@ public class MatchController {
     public ModelAndView getMatchById(@PathVariable UUID id) {
         Match matchById = matchService.getMatchById(id);
 
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("bet-form");
 
@@ -48,6 +50,8 @@ public class MatchController {
         modelAndView.addObject("betRequest",betRequest);
         modelAndView.addObject("match", matchById);
         modelAndView.addObject("errorMessage", null);
+
+
 
         return modelAndView;
     }

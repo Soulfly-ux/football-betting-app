@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <title>Matches · Football Betting App</title>
     <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/matches.css}">
+
+
+
 </head>
 <body>
 <div class="page-wrapper">
 
     <!-- Navbar -->
-    <header class="navbar">
+    <header  class="navbar">
+
+
         <div class="container navbar-inner">
             <div class="nav-logo">
                 <div class="nav-logo-badge">
@@ -64,43 +70,38 @@
                     <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
                         <thead>
                         <tr style="border-bottom:1px solid rgba(148,163,184,0.4); color:#9ca3af;">
-                            <th style="text-align:left; padding:0.5rem 0.4rem;">Kick-off</th>
-                            <th style="text-align:left; padding:0.5rem 0.4rem;">Match</th>
-                            <th style="text-align:center; padding:0.5rem 0.4rem;">1</th>
-                            <th style="text-align:center; padding:0.5rem 0.4rem;">X</th>
-                            <th style="text-align:center; padding:0.5rem 0.4rem;">2</th>
-                            <th style="text-align:right; padding:0.5rem 0.4rem;">Action</th>
+                            <th>Kick-off</th>
+                            <th>Match</th>
+                            <th class="center">1</th>
+                            <th class="center">X</th>
+                            <th class="center">2</th>
+                            <th class="right">Action</th>
+
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="match : ${matches}"
-                            style="border-bottom:1px solid rgba(31,41,55,0.7);">
-                            <td style="padding:0.55rem 0.4rem;">
-                                <span th:text="${#temporals.format(match.startTime, 'dd MMM yyyy, HH:mm')}">
-                                    12 Dec 2025, 20:00
-                                </span>
+                        <tr th:each="match : ${matches}">
+                            <td>
+                                <span th:text="${#temporals.format(match.startTime, 'dd MMM yyyy, HH:mm')}"></span>
                             </td>
-                            <td style="padding:0.55rem 0.4rem;">
-                                <span th:text="${match.homeTeam.name}">Team A</span>
-                                <span style="color:#6b7280;">vs</span>
-                                <span th:text="${match.awayTeam.name}">Team B</span>
+
+                            <td>
+                                <div class="match-cell">
+                                    <span class="team" th:text="${match.homeTeam.name}">Team A</span>
+                                    <span class="vs">vs</span>
+                                    <span class="team" th:text="${match.awayTeam.name}">Team B</span>
+                                </div>
                             </td>
-                            <td style="padding:0.55rem 0.4rem; text-align:center;">
-                                <span th:text="${match.oddHome}">2.10</span>
-                            </td>
-                            <td style="padding:0.55rem 0.4rem; text-align:center;">
-                                <span th:text="${match.oddDraw}">3.30</span>
-                            </td>
-                            <td style="padding:0.55rem 0.4rem; text-align:center;">
-                                <span th:text="${match.oddAway}">3.60</span>
-                            </td>
-                            <td style="padding:0.55rem 0.4rem; text-align:right;">
-                                <a class="btn btn-primary btn-sm"
-                                   th:href="@{|/matches/${match.id}/bet|}">
-                                    Bet
-                                </a>
+
+                            <td class="center"><span th:text="${match.oddHome}">2.10</span></td>
+                            <td class="center"><span th:text="${match.oddDraw}">3.30</span></td>
+                            <td class="center"><span th:text="${match.oddAway}">3.60</span></td>
+
+                            <td class="right">
+                                <a class="btn btn-primary btn-sm" th:href="@{|/matches/${match.id}/bet|}">Bet</a>
                             </td>
                         </tr>
+
                         </tbody>
                     </table>
                 </div>

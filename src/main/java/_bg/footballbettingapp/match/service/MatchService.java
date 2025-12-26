@@ -1,5 +1,6 @@
 package _bg.footballbettingapp.match.service;
 
+import _bg.footballbettingapp.bet.model.Bet;
 import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.model.MatchStatus;
@@ -74,8 +75,6 @@ public class MatchService {
     public void save(Match match) {
         matchRepository.save(match);
     }
-
-
 
 
 

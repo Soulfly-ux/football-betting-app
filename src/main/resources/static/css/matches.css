@@ -1,0 +1,98 @@
+/* Matches page only */
+
+.matches-header {
+    margin-bottom: 1.5rem;
+}
+
+.matches-empty {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.matches-table-wrap {
+    margin-top: 1rem;
+    overflow-x: auto;
+    border-radius: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: rgba(2, 6, 23, 0.55);
+}
+
+.matches-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.88rem;
+    min-width: 820px;
+}
+
+.matches-table thead th {
+    text-align: left;
+    padding: 0.85rem 0.9rem;
+    color: #9ca3af;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.75);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.matches-table thead th.center {
+    text-align: center;
+}
+
+.matches-table thead th.right {
+    text-align: right;
+}
+
+.matches-table tbody td {
+    padding: 0.95rem 0.9rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: middle;
+}
+
+.matches-table tbody td.center {
+    text-align: center;
+}
+
+.matches-table tbody td.right {
+    text-align: right;
+}
+
+.matches-table tbody tr:nth-child(odd) td {
+    background: rgba(15, 23, 42, 0.30);
+}
+
+.matches-table tbody tr:nth-child(even) td {
+    background: rgba(15, 23, 42, 0.18);
+}
+
+.matches-table tbody tr:hover td {
+    background: rgba(56, 189, 248, 0.08);
+}
+
+.match-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+}
+
+.match-cell .team {
+    font-weight: 900;
+}
+
+.match-cell .vs {
+    color: #9ca3af;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.btn-sm {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.85rem;
+    border-radius: 0.8rem;
+}
