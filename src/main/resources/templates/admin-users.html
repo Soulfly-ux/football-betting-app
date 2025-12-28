@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin · Users</title>
+
+    <!-- Общ CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+    <!-- Само за тази страница -->
+    <link rel="stylesheet" th:href="@{/css/admin-users.css}" href="/css/admin-users.css">
+</head>
+
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar (ползвай твоята) -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">FB</div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Admin Panel</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" th:href="@{/my-bets}">My Bets</a>
+
+                <!-- Admin -->
+                <a class="nav-link" th:href="@{/admin}">Admin</a>
+                <a class="nav-link active" th:href="@{/admin/users}">Users</a>
+                <a class="nav-link" th:href="@{/admin/matches}">Matches (Admin)</a>
+
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+
+            <section class="admin-header">
+                <div class="hero-kicker"><span>Administration</span></div>
+                <h1 class="hero-title">Users</h1>
+                <p class="hero-subtitle">Manage roles and account status.</p>
+            </section>
+
+            <!-- Summary cards (по избор) -->
+            <section class="admin-cards">
+                <div class="admin-card">
+                    <div class="admin-card-label">Total users</div>
+                    <div class="admin-card-value" th:text="${users.size()}" >
+                        0
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-label">Active</div>
+                    <div class="admin-card-value" th:text="${activeCount}" >
+
+
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-label">Admins</div>
+                    <div class="admin-card-value">
+                        <!-- TODO -->
+                        0
+                    </div>
+                </div>
+            </section>
+
+            <section class="hero-card">
+                <div class="hero-card-title">All users</div>
+                <div class="hero-card-sub">Toggle status or switch role.</div>
+
+                <!-- Empty state -->
+                <div class="admin-empty"
+                      th:if="${#lists.isEmpty(users)}">
+                    No users found.
+                </div>
+
+                <!-- Table -->
+                <div class="admin-table-wrap"
+                      th:if="${!#lists.isEmpty(users)}" >
+
+
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th class="center">Role</th>
+                            <th class="center">Active</th>
+                            <th class="right">Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr  th:each="u : ${users}" >
+
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar">U</div>
+                                    <div class="user-meta">
+                                        <div class="user-name" th:text="${u.username}">
+
+
+                                        </div>
+                                        <div class="user-sub">
+                                            ID:
+                                            <span class="muted" th:text="${u.id}">
+
+
+                      </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="muted" th:text="${u.email}">
+
+                                email@example.com
+                            </td>
+
+                            <td class="center">
+                <span class="badge role-badge" th:text="${u.role}" >
+
+                  USER
+                </span>
+                            </td>
+
+                            <td class="center">
+                <span class="badge"
+
+                      th:text="${u.active ? 'ACTIVE' : 'DISABLED'}"
+                      th:classappend="${u.active ? ' badge--success' : ' badge--danger'}">
+
+
+
+                </span>
+                            </td>
+
+                            <td class="right">
+                                <div class="row-actions">
+
+                                    <!-- Toggle role -->
+                                    <form th:method="PUT" th:action="@{|/admin/users/${u.id}/role|}"
+                                    >
+
+                                        <input type="hidden" name="_method" value="put"/>
+
+                                        <button class="btn btn-outline btn-sm"
+                                                type="submit"
+
+
+                                        >
+
+                                            Switch role
+                                        </button>
+                                    </form>
+
+                                    <!-- Toggle active -->
+                                    <form th:method="PUT" th:action="@{|/admin/users/${u.id}/status|}"
+                                    >
+
+                                        <input type="hidden" name="_method" value="put"/>
+
+                                        <button class="btn btn-primary btn-sm"
+                                                type="submit"
+                                                th:text="${u.active ? 'Disable' : 'Enable'}"
+                                                th:classappend="${u.active ? ' btn-danger' : ''}"
+                                        >
+
+                                            Toggle status
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </section>
+
+            <div class="form-footer" style="margin-top: 1rem;">
+                <a class="form-link" th:href="@{/admin}">← Back to admin dashboard</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">Admin Users · Manage accounts and roles.</div>
+    </footer>
+
+</div>
+</body>
+</html>
