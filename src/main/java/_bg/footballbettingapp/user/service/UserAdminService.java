@@ -53,7 +53,7 @@ public class UserAdminService {
           userRepository.save(user);
       }
 
-      private User getUserById(UUID userId) {
+      public User getUserById(UUID userId) {
           return userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found"));
       }
 }

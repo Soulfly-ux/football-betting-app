@@ -2,6 +2,7 @@ package _bg.footballbettingapp.web;
 
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserAdminService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,9 @@ public class UserAdminController {
     }
 
     @GetMapping
-    public ModelAndView getAllUsers() {
+    public ModelAndView getAllUsers(HttpSession session) {
+
+        UUID sessionUserId = (UUID) session.getAttribute("user");
 
         List<User> users = userAdminService.getAllUsers();
 
@@ -37,6 +40,7 @@ public class UserAdminController {
         modelAndView.setViewName("admin-users");
         modelAndView.addObject("users", users);
         modelAndView.addObject("activeCount", count);
+        modelAndView.addObject("sessionUserId ", sessionUserId);
 
         return modelAndView;
     }
@@ -45,6 +49,9 @@ public class UserAdminController {
 
     @PutMapping("/{id}/role")
     public String switchUserRole(@PathVariable UUID id) {
+
+
+
 
         userAdminService.switchRole(id);
 

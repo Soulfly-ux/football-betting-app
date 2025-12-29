@@ -33,8 +33,8 @@ public class UserController {
     @GetMapping("/edit")
     public ModelAndView getEditProfilePage(HttpSession session) {
 
-        UUID userId = (UUID) session.getAttribute("user");
-        User currentUser = userService.getUserById(userId);
+        UUID userId = (UUID) session.getAttribute("user"); // вземам id на сесията на даден потребител
+        User currentUser = userService.getUserById(userId);   // вземам user
         EditProfileRequest editProfileRequest = userService.getCurrentUserProfile(userId);
 
         ModelAndView modelAndView = new ModelAndView();

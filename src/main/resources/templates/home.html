@@ -166,7 +166,8 @@
                 <a class="nav-link active" th:href="@{/users/edit}">Edit Profile</a>
                 <a class="nav-link" th:href="@{/matches}">Matches</a>
                 <a class="nav-link" th:href="@{/my-bets}">My Bets</a>
-                <!-- по-късно можеш да вържеш истинско logout действие -->
+                <a class="nav-link" th:if="${user.role.name() == 'ADMIN'}" th:href="@{/admin/users}">Users </a>
+
                 <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
             </nav>
         </div>

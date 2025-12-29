@@ -52,14 +52,14 @@
             <section class="admin-cards">
                 <div class="admin-card">
                     <div class="admin-card-label">Total users</div>
-                    <div class="admin-card-value" th:text="${users.size()}" >
+                    <div class="admin-card-value" th:text="${users.size()}">
                         0
                     </div>
                 </div>
 
                 <div class="admin-card">
                     <div class="admin-card-label">Active</div>
-                    <div class="admin-card-value" th:text="${activeCount}" >
+                    <div class="admin-card-value" th:text="${activeCount}">
 
 
                     </div>
@@ -80,13 +80,13 @@
 
                 <!-- Empty state -->
                 <div class="admin-empty"
-                      th:if="${#lists.isEmpty(users)}">
+                     th:if="${#lists.isEmpty(users)}">
                     No users found.
                 </div>
 
                 <!-- Table -->
                 <div class="admin-table-wrap"
-                      th:if="${!#lists.isEmpty(users)}" >
+                     th:if="${!#lists.isEmpty(users)}">
 
 
                     <table class="admin-table">
@@ -101,7 +101,7 @@
                         </thead>
 
                         <tbody>
-                        <tr  th:each="u : ${users}" >
+                        <tr th:each="u : ${users}">
 
                             <td>
                                 <div class="user-cell">
@@ -128,7 +128,7 @@
                             </td>
 
                             <td class="center">
-                <span class="badge role-badge" th:text="${u.role}" >
+                <span class="badge role-badge" th:text="${u.role}">
 
                   USER
                 </span>
@@ -149,23 +149,21 @@
                                 <div class="row-actions">
 
                                     <!-- Toggle role -->
-                                    <form th:method="PUT" th:action="@{|/admin/users/${u.id}/role|}"
+                                    <form th:method="POST" th:action="@{|/admin/users/${u.id}/role|}"
                                     >
 
                                         <input type="hidden" name="_method" value="put"/>
 
                                         <button class="btn btn-outline btn-sm"
                                                 type="submit"
-
-
-                                        >
-
+                                                th:text="${u.role.name() == 'ADMIN' ? 'Make User' : 'Make Admin'}"
+                                                th:disabled="${u.id == sessionUserId}">
                                             Switch role
                                         </button>
                                     </form>
 
                                     <!-- Toggle active -->
-                                    <form th:method="PUT" th:action="@{|/admin/users/${u.id}/status|}"
+                                    <form th:method="POST" th:action="@{|/admin/users/${u.id}/status|}"
                                     >
 
                                         <input type="hidden" name="_method" value="put"/>
