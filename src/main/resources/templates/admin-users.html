@@ -67,8 +67,8 @@
 
                 <div class="admin-card">
                     <div class="admin-card-label">Admins</div>
-                    <div class="admin-card-value">
-                        <!-- TODO -->
+                    <div class="admin-card-value" th:text="${adminsCount}">
+
                         0
                     </div>
                 </div>
@@ -172,6 +172,7 @@
                                                 type="submit"
                                                 th:text="${u.active ? 'Disable' : 'Enable'}"
                                                 th:classappend="${u.active ? ' btn-danger' : ''}"
+                                                th:disabled="${u.id == sessionUserId }"
                                         >
 
                                             Toggle status
