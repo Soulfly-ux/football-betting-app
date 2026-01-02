@@ -103,6 +103,18 @@ public class TeamDataInitializer implements CommandLineRunner {
                         .shortName("INT")
                         .country(Country.ITALY)
                         .logoUrl(null)
+                        .build(),
+                Team.builder()
+                        .name("Newcastle")
+                        .shortName("NEW")
+                        .country(Country.UNITED_KINGDOM)
+                        .logoUrl(null)
+                        .build(),
+                Team.builder()
+                        .name("Bologna")
+                        .shortName("BOL")
+                        .country(Country.ITALY)
+                        .logoUrl(null)
                         .build()
 
                 // ... добавяш още

@@ -32,8 +32,24 @@ public class UserAdminService {
     }
 
 
-      public void switchRole(UUID userId) {
-          User user = getUserById(userId);
+      public void switchRole(UUID targetUserId, UUID actorUserId) {
+
+
+          // targetUserId-> потребителя, чиято роля ще сменя като админ(= id-то от URL: /{id}/role)
+          //  actorUserId -> = id-то от session: session.getAttribute("user") → това си ти (логнатият админ)
+
+          if (targetUserId.equals(actorUserId)){
+              throw new DomainException("Cannot switch role for yourself");
+          }
+
+          User user = getUserById(targetUserId);
+
+          int adminCount = userRepository.countByRole(Role.ADMIN);
+
+
+          if(adminCount == 1 && user.getRole() == Role.ADMIN) {
+              throw new DomainException("Cannot remove last admin role");
+          }
 
 
           if(user.getRole() == Role.ADMIN) {
@@ -55,5 +71,14 @@ public class UserAdminService {
 
       public User getUserById(UUID userId) {
           return userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found"));
+      }
+
+
+      public long countActiveUsers() {
+          return userRepository.countByIsActive(true);
+      }
+
+      public long countAdmins() {
+          return userRepository.countByRole(Role.ADMIN);
       }
 }

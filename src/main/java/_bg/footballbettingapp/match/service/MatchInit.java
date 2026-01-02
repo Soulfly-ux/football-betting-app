@@ -87,7 +87,7 @@ public class MatchInit implements CommandLineRunner {
         match4.setAwayTeam(juventus);
         match4.setLeagueName("Champions League");
         match4.setMatchStatus(MatchStatus.SCHEDULED);
-        match4.setStartTime(base.plusDays(1));
+        match4.setStartTime(base.minusDays(3));
         match4.setOddHome(new BigDecimal("2.10"));
         match4.setOddDraw(new BigDecimal("3.50"));
         match4.setOddAway(new BigDecimal("2.50"));
@@ -98,7 +98,7 @@ public class MatchInit implements CommandLineRunner {
                 .awayTeam(tottenham)
                 .leagueName("Premier League")
                 .matchStatus(MatchStatus.SCHEDULED)
-                .startTime(base.plusDays(1))
+                .startTime(base.minusDays(5))
                 .oddHome(new BigDecimal("1.90"))
                 .oddDraw(new BigDecimal("2.20"))
                 .oddAway(new BigDecimal("3.00"))
@@ -108,7 +108,9 @@ public class MatchInit implements CommandLineRunner {
 
 
 
-
+       if (matchRepository.count() > 0){
+           return;
+       }
 
 
 

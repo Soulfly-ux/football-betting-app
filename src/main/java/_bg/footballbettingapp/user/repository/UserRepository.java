@@ -18,4 +18,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(@NotNull String email);
 
     boolean existsByRole(Role role);
+
+    int countByRole(Role role);
+
+    Role role(Role role);
+
+    int countByIsActive(boolean b);
 }

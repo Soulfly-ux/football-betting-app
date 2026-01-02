@@ -16,14 +16,14 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin/users")
-public class UserAdminController {
+public class AdminUserController {
 
 
     private final UserAdminService userAdminService;
 
 
     @Autowired
-    public UserAdminController(UserAdminService userAdminService) {
+    public AdminUserController(UserAdminService userAdminService) {
         this.userAdminService = userAdminService;
     }
 
@@ -34,12 +34,16 @@ public class UserAdminController {
 
         List<User> users = userAdminService.getAllUsers();
 
-        long count = users.stream().filter(User::isActive).count();
+        long countActiveUsers = userAdminService.countActiveUsers();
+
+        long admins = userAdminService.countAdmins();
+
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin-users");
         modelAndView.addObject("users", users);
-        modelAndView.addObject("activeCount", count);
+        modelAndView.addObject("activeCount", countActiveUsers);
+        modelAndView.addObject("adminsCount", admins);
         modelAndView.addObject("sessionUserId ", sessionUserId);
 
         return modelAndView;
@@ -47,13 +51,17 @@ public class UserAdminController {
 
 
 
-    @PutMapping("/{id}/role")
-    public String switchUserRole(@PathVariable UUID id) {
+    @PutMapping("/{targetUserId}/role")
+    public String switchUserRole(@PathVariable UUID targetUserId, HttpSession session) {
+
+        //UUID targetUserId - id на потребителя, чиято роля ще сменя като админ(= id-то от URL: /{id}/role)
+        // actorUserId - id на админа, който сменя ролята на друг потребител
+
+        UUID actorUserId = (UUID) session.getAttribute("user");
 
 
 
-
-        userAdminService.switchRole(id);
+       userAdminService.switchRole(targetUserId,actorUserId);
 
         return "redirect:/admin/users";
     }

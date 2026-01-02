@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Finish Match · Admin</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/admin-finish.css}" href="/css/admin-finish.css">
+</head>
+
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">FB</div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Admin Panel</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" th:href="@{/bets/my-bets}">My Bets</a>
+
+                <a class="nav-link" th:href="@{/admin}">Admin</a>
+                <a class="nav-link" th:href="@{/admin/users}">Users</a>
+                <a class="nav-link active" th:href="@{/admin/matches}">Matches (Admin)</a>
+
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+
+            <!-- Header -->
+            <section class="admin-header">
+                <div class="hero-kicker"><span>Administration</span></div>
+                <h1 class="hero-title">Finish match</h1>
+                <p class="hero-subtitle">Set the final score and settle all pending bets for this match.</p>
+            </section>
+
+            <section class="hero-card finish-card">
+
+                <!-- Match info -->
+                <div class="finish-match-info">
+                    <div class="finish-top-row">
+                        <span class="badge role-badge" th:text="${match.leagueName}">Premier League</span>
+
+                        <span class="badge"
+                              th:text="${match.matchStatus}"
+                              th:classappend="${match.matchStatus.name() == 'IN_PROGRESS' ? ' badge--info'
+                    : (match.matchStatus.name() == 'SCHEDULED' ? ' badge--neutral'
+                    : ' badge--success')}">
+              SCHEDULED
+            </span>
+                    </div>
+
+                    <div class="finish-teams-row">
+                        <div class="team-pill">
+                            <span class="team-name" th:text="${match.homeTeam.name}">Liverpool</span>
+                        </div>
+
+                        <span class="vs">vs</span>
+
+                        <div class="team-pill">
+                            <span class="team-name" th:text="${match.awayTeam.name}">Tottenham</span>
+                        </div>
+                    </div>
+
+                    <div class="finish-meta-row">
+                        <span class="muted">Kick-off:</span>
+                        <span th:text="${#temporals.format(match.startTime, 'dd MMM yyyy, HH:mm')}">
+              02 Jan 2026, 12:00
+            </span>
+                    </div>
+
+                    <div class="finish-odds-row">
+                        <div class="odd-box">
+                            <span class="k">1</span>
+                            <span class="v" th:text="${match.oddHome}">1.90</span>
+                        </div>
+                        <div class="odd-box">
+                            <span class="k">X</span>
+                            <span class="v" th:text="${match.oddDraw}">2.20</span>
+                        </div>
+                        <div class="odd-box">
+                            <span class="k">2</span>
+                            <span class="v" th:text="${match.oddAway}">3.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning -->
+                <div class="finish-warning">
+                    <div class="finish-warning-title">This action is final</div>
+                    <div class="finish-warning-sub">
+                        After you submit the score, the system will mark the match as <b>FINISHED</b> and settle all <b>PENDING</b> bets.
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form class="finish-form"
+                      th:object="${finishRequest}"
+                      th:action="@{|/admin/matches/${match.id}/finish|}"
+                      method="post">
+
+                    <input type="hidden" name="_method" value="put"/>
+
+                    <div class="score-grid">
+                        <div class="score-field">
+                            <label class="form-label" for="homeGoals">
+                                Home goals
+                                <span class="muted">(<span th:text="${match.homeTeam.name}">Home</span>)</span>
+                            </label>
+                            <input id="homeGoals"
+                                   type="number"
+                                   min="0"
+                                   step="1"
+                                   class="form-control"
+                                   th:field="*{homeGoals}">
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('homeGoals')}"
+                                 th:errors="*{homeGoals}">
+                                Invalid home goals
+                            </div>
+                        </div>
+
+                        <div class="score-field">
+                            <label class="form-label" for="awayGoals">
+                                Away goals
+                                <span class="muted">(<span th:text="${match.awayTeam.name}">Away</span>)</span>
+                            </label>
+                            <input id="awayGoals"
+                                   type="number"
+                                   min="0"
+                                   step="1"
+                                   class="form-control"
+                                   th:field="*{awayGoals}">
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('awayGoals')}"
+                                 th:errors="*{awayGoals}">
+                                Invalid away goals
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Global error (ако върнеш errorMessage от handler) -->
+                    <div class="form-error-global"
+                         th:if="${errorMessage != null}">
+                        <span th:text="${errorMessage}">Cannot finish match.</span>
+                    </div>
+
+                    <div class="finish-actions">
+                        <a class="btn btn-outline" th:href="@{/admin/matches}">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Finish match</button>
+                    </div>
+
+                    <div class="finish-footnote">
+                        Tip: If the match is still <b>SCHEDULED</b> but kick-off is in the past, you can finish it here for demo purposes.
+                    </div>
+                </form>
+
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">Admin Finish · Set result and settle bets.</div>
+    </footer>
+
+</div>
+</body>
+</html>

@@ -15,13 +15,15 @@ import java.util.UUID;
 @Repository
 public interface MatchRepository extends JpaRepository<Match, UUID> {
 
-    List<Match> findAllByMatchStatusOrderByStartTimeAsc(MatchStatus status);
+    List<Match> findAllByMatchStatusInOrderByStartTimeAsc(List<MatchStatus> status);
 
     List<Match> findAllByMatchStatusAndStartTimeAfterOrderByStartTimeAsc(MatchStatus status, LocalDateTime startTime);
 
     List<Match> findAllByHomeTeamOrAwayTeam(Team homeTeam, Team awayTeam);
 
     boolean existsByHomeTeamAndAwayTeamAndStartTime(Team homeTeam, Team awayTeam, LocalDateTime startTime);
+
+
 
 
 }

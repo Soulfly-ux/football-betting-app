@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin · Matches</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/admin-matches.css}" href="/css/admin-matches.css">
+</head>
+
+<body>
+<div class="page-wrapper">
+
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">FB</div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Admin Panel</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" th:href="@{/bets/my-bets}">My Bets</a>
+
+                <a class="nav-link" th:href="@{/admin}">Admin</a>
+                <a class="nav-link" th:href="@{/admin/users}">Users</a>
+                <a class="nav-link active" th:href="@{/admin/matches}">Matches (Admin)</a>
+
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+
+            <section class="admin-header">
+                <div class="hero-kicker"><span>Administration</span></div>
+                <h1 class="hero-title">Matches</h1>
+                <p class="hero-subtitle">Finish matches, manage statuses and keep bets in sync.</p>
+            </section>
+
+            <section class="hero-card">
+                <div class="hero-card-title">Open matches</div>
+                <div class="hero-card-sub">SCHEDULED / IN_PROGRESS that require action.</div>
+
+                <div class="admin-empty" th:if="${#lists.isEmpty(matches)}" >
+
+                    No matches found.
+                </div>
+
+                <div class="admin-table-wrap" th:if="${!#lists.isEmpty(matches)}">
+
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th>Kick-off</th>
+                            <th>Match</th>
+                            <th class="center">League</th>
+                            <th class="center">Odds</th>
+                            <th class="center">Status</th>
+                            <th class="right">Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="m : ${matches}">
+
+
+                            <td class="muted" th:text="${#temporals.format(m.startTime, 'dd MMM yyyy, HH:mm')}" >
+
+                                02 Jan 2026, 12:00
+                                <div class="tiny" >
+
+                                    <span class="badge badge--warning" th:if="${m.startTime.isBefore(T(java.time.LocalDateTime).now()) && m.matchStatus.name() == 'SCHEDULED'}">Overdue</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="match-cell">
+                  <span class="team"  th:text="${m.homeTeam.name}">
+
+                    Arsenal
+                  </span>
+                                    <span class="vs">vs</span>
+                                    <span class="team"  th:text="${m.awayTeam.name}" >
+
+                    Chelsea
+                  </span>
+                                </div>
+                            </td>
+
+                            <td class="center">
+                <span class="badge role-badge" th:text="${m.leagueName}">
+
+                  Premier League
+                </span>
+                            </td>
+
+                            <td class="center">
+                                <div class="odds-mini">
+                                    <span class="odd"><span class="k">1</span> <span class="v" th:text="${m.oddHome}">2.10</span></span>
+                                    <span class="odd"><span class="k">X</span> <span class="v" th:text="${m.oddDraw}">3.30</span></span>
+                                    <span class="odd"><span class="k">2</span> <span class="v" th:text="${m.oddAway}">3.60</span></span>
+
+                                </div>
+                            </td>
+
+                            <td class="center">
+                <span class="badge"  th:text="${m.matchStatus}"
+                      th:classappend="${m.matchStatus.name() == 'IN_PROGRESS' ? ' badge--info' : ' badge--neutral'}"
+                >
+
+
+                  SCHEDULED
+                </span>
+                            </td>
+
+                            <td class="right">
+                                <div class="row-actions">
+                                    <a class="btn btn-outline btn-sm"
+                                       href="#"
+                                       th:href="@{|/admin/matches/${m.id}/edit|}">
+
+                                        Edit
+                                    </a>
+
+                                    <a class="btn btn-primary btn-sm"
+                                       href="#" th:href="@{|/admin/matches/${m.id}/finish|}">
+
+                                        Finish
+                                    </a>
+                                </div>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="form-footer" style="margin-top: 1rem;">
+                <a class="form-link" th:href="@{/admin}">← Back to admin dashboard</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">Admin Matches · Finish matches and settle bets.</div>
+    </footer>
+
+</div>
+</body>
+</html>
