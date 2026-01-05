@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Match · Admin</title>
+
+  <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+  <link rel="stylesheet" th:href="@{/css/admin-match-create.css}" href="/css/admin-match-create.css">
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <div class="nav-logo">
+        <div class="nav-logo-badge">FB</div>
+        <div class="nav-logo-text">
+          <div class="nav-logo-main">Football Betting</div>
+          <div class="nav-logo-sub">Admin Panel</div>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a class="nav-link" th:href="@{/admin/matches}">← Back</a>
+        <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="container">
+
+      <section class="admin-header">
+        <div class="hero-kicker"><span>Administration</span></div>
+        <h1 class="hero-title">Create match</h1>
+        <p class="hero-subtitle">Add a new fixture with odds. Match starts as SCHEDULED.</p>
+      </section>
+
+      <section class="hero-card form-card">
+
+        <form class="match-form"
+              th:object="<!-- TODO: model attribute -->"
+              th:action="<!-- TODO: POST endpoint -->"
+              method="post">
+
+          <div class="form-grid">
+
+            <!-- Home team -->
+            <div class="form-group">
+              <label class="form-label" for="homeTeamId">Home team</label>
+              <select id="homeTeamId" class="form-control"
+                      th:field="<!-- TODO: homeTeamId -->">
+                <option value="" disabled selected>Select home team</option>
+                <option th:each="t : ${teams}"
+                        th:value="<!-- TODO: t.id -->"
+                        th:text="<!-- TODO: t.name -->">
+                  Team
+                </option>
+              </select>
+              <div class="field-error"
+                   th:if="${#fields.hasErrors('homeTeamId')}"
+                   th:errors="*{homeTeamId}">Error</div>
+            </div>
+
+            <!-- Away team -->
+            <div class="form-group">
+              <label class="form-label" for="awayTeamId">Away team</label>
+              <select id="awayTeamId" class="form-control"
+                      th:field="<!-- TODO: awayTeamId -->">
+                <option value="" disabled selected>Select away team</option>
+                <option th:each="t : ${teams}"
+                        th:value="<!-- TODO: t.id -->"
+                        th:text="<!-- TODO: t.name -->">
+                  Team
+                </option>
+              </select>
+              <div class="field-error"
+                   th:if="${#fields.hasErrors('awayTeamId')}"
+                   th:errors="*{awayTeamId}">Error</div>
+            </div>
+
+            <!-- League -->
+            <div class="form-group">
+              <label class="form-label" for="leagueName">League</label>
+              <input id="leagueName"
+                     type="text"
+                     class="form-control"
+                     placeholder="e.g. Premier League"
+                     th:field="<!-- TODO: leagueName -->">
+              <div class="field-error"
+                   th:if="${#fields.hasErrors('leagueName')}"
+                   th:errors="*{leagueName}">Error</div>
+            </div>
+
+            <!-- Start time -->
+            <div class="form-group">
+              <label class="form-label" for="startTime">Start time</label>
+              <input id="startTime"
+                     type="datetime-local"
+                     class="form-control"
+                     th:field="<!-- TODO: startTime -->">
+              <div class="field-error"
+                   th:if="${#fields.hasErrors('startTime')}"
+                   th:errors="*{startTime}">Error</div>
+              <div class="hint">Use local time (Vienna). Format is handled by the browser.</div>
+            </div>
+
+          </div>
+
+          <div class="odds-block">
+            <div class="odds-title">Odds</div>
+            <div class="odds-grid">
+              <div class="form-group">
+                <label class="form-label" for="oddHome">1 (Home win)</label>
+                <input id="oddHome" type="number" step="0.01" min="1.01"
+                       class="form-control"
+                       th:field="<!-- TODO: oddHome -->">
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('oddHome')}"
+                     th:errors="*{oddHome}">Error</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="oddDraw">X (Draw)</label>
+                <input id="oddDraw" type="number" step="0.01" min="1.01"
+                       class="form-control"
+                       th:field="<!-- TODO: oddDraw -->">
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('oddDraw')}"
+                     th:errors="*{oddDraw}">Error</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="oddAway">2 (Away win)</label>
+                <input id="oddAway" type="number" step="0.01" min="1.01"
+                       class="form-control"
+                       th:field="<!-- TODO: oddAway -->">
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('oddAway')}"
+                     th:errors="*{oddAway}">Error</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Global error (ако върнеш errorMessage от service) -->
+          <div class="form-error-global"
+               th:if="${errorMessage != null}">
+            <span th:text="${errorMessage}">Cannot create match.</span>
+          </div>
+
+          <div class="form-actions">
+            <a class="btn btn-outline" th:href="@{/admin/matches}">Cancel</a>
+            <button class="btn btn-primary" type="submit">Create match</button>
+          </div>
+
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Admin · Create Match</div>
+  </footer>
+
+</div>
+</body>
+</html>
