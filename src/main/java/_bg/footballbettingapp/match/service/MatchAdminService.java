@@ -8,6 +8,7 @@ import _bg.footballbettingapp.match.repository.MatchRepository;
 import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.team.service.TeamService;
 import _bg.footballbettingapp.web.dto.CreateMatchRequest;
+import _bg.footballbettingapp.web.dto.EditMatchRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -111,4 +112,47 @@ public class MatchAdminService {
 
         matchRepository.saveAndFlush(match);
     }
+
+
+    private Match getMatchById(UUID matchId) {
+        return matchRepository.findById(matchId).orElseThrow(() -> new DomainException("Match not found"));
+    }
+
+
+    public EditMatchRequest getMatchForEdit (UUID matchId) {
+       //  за GET заявката - взима данните за редактиране -> GET edit = “дай ми текущите данни, за да ги редактирам”
+        Match match = getMatchById(matchId);
+
+
+        EditMatchRequest dto = new EditMatchRequest();
+        dto.setStartTime(match.getStartTime());
+        dto.setOddHome(match.getOddHome());
+        dto.setOddDraw(match.getOddDraw());
+        dto.setOddAway(match.getOddAway());
+
+
+        return dto;
+    }
+
+
+    public void editMatch(EditMatchRequest dto, UUID matchId) {
+       // за PUT заявката -> PUT edit = “ето новите данни, запази ги”
+
+        Match match = getMatchById(matchId);
+
+        if (match.getMatchStatus() == MatchStatus.FINISHED || match.getMatchStatus() == MatchStatus.CANCELLED) {
+            throw new DomainException("Match cannot be edited as it is finished or cancelled");
+        }
+
+        match.setStartTime(dto.getStartTime());
+        match.setOddHome(dto.getOddHome());
+        match.setOddDraw(dto.getOddDraw());
+        match.setOddAway(dto.getOddAway());
+
+
+        matchRepository.save(match);
+
+    }
+
+
 }

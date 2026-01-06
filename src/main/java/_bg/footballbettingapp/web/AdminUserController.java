@@ -2,6 +2,7 @@ package _bg.footballbettingapp.web;
 
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserAdminService;
+import _bg.footballbettingapp.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,17 +21,20 @@ public class AdminUserController {
 
 
     private final UserAdminService userAdminService;
+    private final UserService userService;
 
 
     @Autowired
-    public AdminUserController(UserAdminService userAdminService) {
+    public AdminUserController(UserAdminService userAdminService, UserService userService) {
         this.userAdminService = userAdminService;
+        this.userService = userService;
     }
 
     @GetMapping
     public ModelAndView getAllUsers(HttpSession session) {
 
         UUID sessionUserId = (UUID) session.getAttribute("user");
+        User userById = userService.getUserById(sessionUserId);
 
         List<User> users = userAdminService.getAllUsers();
 
@@ -45,6 +49,7 @@ public class AdminUserController {
         modelAndView.addObject("activeCount", countActiveUsers);
         modelAndView.addObject("adminsCount", admins);
         modelAndView.addObject("sessionUserId ", sessionUserId);
+        modelAndView.addObject("user",userById);
 
         return modelAndView;
     }

@@ -8,6 +8,7 @@ import _bg.footballbettingapp.team.service.TeamService;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.CreateMatchRequest;
+import _bg.footballbettingapp.web.dto.EditMatchRequest;
 import _bg.footballbettingapp.web.dto.FinishMatchRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -142,5 +143,19 @@ public class AdminMatchesController {
       matchAdminService.createNewMatch(createMatchRequest);
 
          return new ModelAndView("redirect:/admin/matches");
+    }
+
+
+    @GetMapping("/{id}/edit")
+    public ModelAndView editMatch(@PathVariable UUID id) {
+
+        Match match = matchService.getMatchById(id);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("match", match);
+        modelAndView.addObject("editMatchRequest", new EditMatchRequest());
+
+
+        return null;
     }
 }
