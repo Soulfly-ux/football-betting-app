@@ -3,15 +3,18 @@ package _bg.footballbettingapp.web;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.service.MatchAdminService;
 import _bg.footballbettingapp.match.service.MatchService;
+import _bg.footballbettingapp.team.model.Team;
+import _bg.footballbettingapp.team.service.TeamService;
+import _bg.footballbettingapp.user.model.User;
+import _bg.footballbettingapp.user.service.UserService;
+import _bg.footballbettingapp.web.dto.CreateMatchRequest;
 import _bg.footballbettingapp.web.dto.FinishMatchRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -23,15 +26,25 @@ public class AdminMatchesController {
 
      private final MatchService matchService;
      private final MatchAdminService matchAdminService;
+     private final TeamService teamService;
+     private final UserService userService;
 
      @Autowired
-    public AdminMatchesController(MatchService matchService, MatchAdminService matchAdminService) {
+    public AdminMatchesController(MatchService matchService, MatchAdminService matchAdminService, TeamService teamService, UserService userService) {
         this.matchService = matchService;
          this.matchAdminService = matchAdminService;
+         this.teamService = teamService;
+         this.userService = userService;
      }
 
     @GetMapping
-    public ModelAndView getMatches() {
+    public ModelAndView getMatches(HttpSession session) {
+
+
+        UUID userId = (UUID) session.getAttribute("user");
+        User user = userService.getUserById(userId);
+
+
 
         List<Match> adminOpenMatches = matchAdminService.getAdminOpenMatches();
 
@@ -39,6 +52,7 @@ public class AdminMatchesController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin-matches");
         modelAndView.addObject("matches", adminOpenMatches );
+        modelAndView.addObject("user", user);
 
 
 
@@ -84,5 +98,49 @@ public class AdminMatchesController {
 
         matchAdminService.finishMatch(id, finishRequest.getHomeGoals(), finishRequest.getAwayGoals());
         return new ModelAndView("redirect:/admin/matches");
+    }
+
+
+
+    @GetMapping("/new")
+    public ModelAndView createNewMatch() {
+
+        List<Team> allTeams = teamService.getAllTeamSortedByName();
+
+        List<String> supportedLeagues = matchAdminService.getSupportedLeagues();
+
+
+        ModelAndView modelAndView = new ModelAndView();
+         modelAndView.setViewName("admin-match-create");
+         modelAndView.addObject("teams", allTeams);
+         modelAndView.addObject("leagues", supportedLeagues);
+         modelAndView.addObject("createMatchRequest", new CreateMatchRequest());
+
+
+
+        return modelAndView;
+    }
+
+    @PostMapping("/new")
+    public ModelAndView createNewMatch(@Valid CreateMatchRequest createMatchRequest, BindingResult bindingResult) {
+
+         if (bindingResult.hasErrors()) {
+             ModelAndView modelAndView = new ModelAndView();
+             List<Team> allTeams = teamService.getAllTeamSortedByName();
+             List<String> supportedLeagues = matchAdminService.getSupportedLeagues();
+             modelAndView.setViewName("admin-match-create");
+             modelAndView.addObject("leagues", supportedLeagues);
+             modelAndView.addObject("teams", allTeams);
+             modelAndView.addObject("createMatchRequest", createMatchRequest);
+
+
+             return modelAndView;
+         }
+
+
+
+      matchAdminService.createNewMatch(createMatchRequest);
+
+         return new ModelAndView("redirect:/admin/matches");
     }
 }

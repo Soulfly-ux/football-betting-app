@@ -20,4 +20,6 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
 
     Optional<Team> findByNameIgnoreCase(String normalizedName);
+
+    List<Team> findAllByOrderByNameAsc();
 }

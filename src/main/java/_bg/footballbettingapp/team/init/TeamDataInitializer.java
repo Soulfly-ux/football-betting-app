@@ -115,6 +115,18 @@ public class TeamDataInitializer implements CommandLineRunner {
                         .shortName("BOL")
                         .country(Country.ITALY)
                         .logoUrl(null)
+                        .build(),
+                Team.builder()
+                        .name("CSKA-Sofia")
+                        .shortName("CSKA")
+                        .country(Country.BULGARIA)
+                        .logoUrl(null)
+                        .build(),
+                Team.builder()
+                        .name("Levski-Sofia")
+                        .shortName("LSK")
+                        .country(Country.BULGARIA)
+                        .logoUrl(null)
                         .build()
 
                 // ... добавяш още

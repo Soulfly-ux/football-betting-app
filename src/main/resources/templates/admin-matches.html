@@ -29,6 +29,7 @@
                 <a class="nav-link" th:href="@{/admin}">Admin</a>
                 <a class="nav-link" th:href="@{/admin/users}">Users</a>
                 <a class="nav-link active" th:href="@{/admin/matches}">Matches (Admin)</a>
+                <a class="nav-link" th:if="${user.role.name() == 'ADMIN'}" th:href="@{/admin/matches/new}">Create Matches (Admin) </a>
 
                 <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
             </nav>
