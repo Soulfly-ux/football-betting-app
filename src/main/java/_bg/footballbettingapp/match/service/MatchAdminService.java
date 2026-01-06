@@ -119,9 +119,9 @@ public class MatchAdminService {
     }
 
 
-    public EditMatchRequest getMatchForEdit (UUID matchId) {
+    public EditMatchRequest mapToEditMatchRequest (Match match) {
        //  за GET заявката - взима данните за редактиране -> GET edit = “дай ми текущите данни, за да ги редактирам”
-        Match match = getMatchById(matchId);
+//      мапва текущите данни на мача към дто
 
 
         EditMatchRequest dto = new EditMatchRequest();

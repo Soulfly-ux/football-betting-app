@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Match · Admin</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/admin-match-edit.css}" href="/css/admin-match-edit.css">
+</head>
+
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">FB</div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Admin Panel</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/admin/matches}">← Back</a>
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+
+            <!-- Header -->
+            <section class="admin-header">
+                <div class="hero-kicker"><span>Administration</span></div>
+                <h1 class="hero-title">Edit match</h1>
+                <p class="hero-subtitle">Update start time and odds. Teams & league are read-only.</p>
+            </section>
+
+            <!-- Match info card -->
+            <section class="hero-card info-card">
+                <div class="info-top">
+                    <div class="info-title">
+                        <span class="team" th:text= "${match.homeTeam.name}">Home</span>
+                        <span class="vs">vs</span>
+                        <span class="team" th:text="${match.awayTeam.name}">Away</span>
+                    </div>
+
+                    <div class="info-badges">
+                        <span class="badge-league" th:text="${match.leagueName}">Premier League</span>
+
+                        <span class="badge-status"
+                              th:text="${match.matchStatus}"
+                              th:classappend="${match.matchStatus.name() == 'SCHEDULED' ? ' badge-status--scheduled'
+                    : (match.matchStatus.name() == 'IN_PROGRESS' ? ' badge-status--progress'
+                    : (match.matchStatus.name() == 'FINISHED' ? ' badge-status--finished'
+                    : ' badge-status--cancelled'))}">
+  SCHEDULED
+</span>
+
+                    </div>
+                </div>
+
+                <div class="info-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Current kick-off</div>
+                        <div class="meta-value"
+                             th:text="${#temporals.format(match.startTime, 'dd MMM yyyy, HH:mm')}">
+                            06 Jan 2026, 12:00
+                        </div>
+                    </div>
+
+                    <div class="meta-item">
+                        <div class="meta-label">Current odds (1 / X / 2)</div>
+                        <div class="meta-value">
+                            <span th:text="${match.oddHome}">2.10</span>
+                            <span class="sep">/</span>
+                            <span th:text=" ${match.oddDraw}">3.30</span>
+                            <span class="sep">/</span>
+                            <span th:text="${match.oddAway}">3.60</span>
+                        </div>
+                    </div>
+
+                    <div class="meta-item">
+                        <div class="meta-label">Match ID</div>
+                        <div class="meta-value mono" th:text="${match.id}">uuid</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Edit form card -->
+            <section class="hero-card form-card">
+
+                <!-- optional global error (ако върнеш errorMessage от @ControllerAdvice) -->
+                <div class="form-error-global" th:if="${errorMessage != null}">
+                    <span th:text="${errorMessage}">Cannot update match.</span>
+                </div>
+
+                <form class="match-form"
+                      th:object="${editMatchRequest}"
+                      th:action="@{/admin/matches/{id}(id=${match.id})}"
+                      method="post">
+
+                    <!-- Hidden method override -->
+                    <input type="hidden" name="_method" value="put"/>
+
+                    <div class="form-grid">
+
+                        <!-- Start time -->
+                        <div class="form-group">
+                            <label class="form-label" for="startTime">Start time</label>
+                            <input id="startTime"
+                                   type="datetime-local"
+                                   class="form-control"
+                                   th:field="*{startTime}">
+
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('startTime')}"
+                                 th:errors="*{startTime}">Error</div>
+
+                            <div class="hint">Update kick-off time. Use local time.</div>
+                        </div>
+
+                        <!-- Read-only league (не го редактираме) -->
+                        <div class="form-group">
+                            <label class="form-label">League</label>
+                            <div class="readonly-pill">
+                                <span th:text="${match.leagueName}">Premier League</span>
+                            </div>
+                            <div class="hint">League is not editable after creation.</div>
+                        </div>
+
+                    </div>
+
+                    <div class="odds-block">
+                        <div class="odds-title">New odds</div>
+
+                        <div class="odds-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="oddHome">1 (Home win)</label>
+                                <input id="oddHome"
+                                       type="number"
+                                       step="0.01"
+                                       min="1.01"
+                                       class="form-control"
+                                       th:field="*{oddHome}">
+                                <div class="field-error"
+                                     th:if="${#fields.hasErrors('oddHome')}"
+                                     th:errors="*{oddHome}">Error</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="oddDraw">X (Draw)</label>
+                                <input id="oddDraw"
+                                       type="number"
+                                       step="0.01"
+                                       min="1.01"
+                                       class="form-control"
+                                       th:field="*{oddDraw}">
+                                <div class="field-error"
+                                     th:if="${#fields.hasErrors('oddDraw')}"
+                                     th:errors="*{oddDraw}">Error</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="oddAway">2 (Away win)</label>
+                                <input id="oddAway"
+                                       type="number"
+                                       step="0.01"
+                                       min="1.01"
+                                       class="form-control"
+                                       th:field="*{oddAway}">
+                                <div class="field-error"
+                                     th:if="${#fields.hasErrors('oddAway')}"
+                                     th:errors="*{oddAway}">Error</div>
+                            </div>
+                        </div>
+
+                        <div class="odds-preview">
+                            <div class="odds-preview-label">Preview</div>
+                            <div class="odds-preview-value">
+                                <span class="chip">1: <span th:text="*{oddHome}">2.10</span></span>
+                                <span class="chip">X: <span th:text="*{oddDraw}">3.30</span></span>
+                                <span class="chip">2: <span th:text="*{oddAway}">3.60</span></span>
+                            </div>
+                            <div class="hint">This preview updates on server render (not JS).</div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a class="btn btn-outline" th:href="@{/admin/matches}">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                    </div>
+
+                </form>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">Admin · Edit Match</div>
+    </footer>
+
+</div>
+</body>
+</html>

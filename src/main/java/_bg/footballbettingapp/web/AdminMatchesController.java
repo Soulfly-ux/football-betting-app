@@ -150,12 +150,35 @@ public class AdminMatchesController {
     public ModelAndView editMatch(@PathVariable UUID id) {
 
         Match match = matchService.getMatchById(id);
+        EditMatchRequest editMatchRequest = matchAdminService.mapToEditMatchRequest(match);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("match", match);
-        modelAndView.addObject("editMatchRequest", new EditMatchRequest());
+        modelAndView.addObject("editMatchRequest", editMatchRequest);
+        modelAndView.setViewName("admin-match-edit");
 
 
-        return null;
+        return modelAndView;
+    }
+
+
+    @PutMapping("/{id}")
+    public ModelAndView editMatch(@PathVariable UUID id,@Valid EditMatchRequest editMatchRequest, BindingResult bindingResult) {
+
+         if (bindingResult.hasErrors()) {
+
+             ModelAndView modelAndView = new ModelAndView();
+             Match match = matchService.getMatchById(id);
+             modelAndView.setViewName("admin-match-edit");
+             modelAndView.addObject("match", match);
+             modelAndView.addObject("editMatchRequest", editMatchRequest);
+
+
+             return modelAndView;
+         }
+
+         matchAdminService.editMatch(editMatchRequest, id);
+
+         return new ModelAndView("redirect:/admin/matches");
     }
 }

@@ -1,0 +1,259 @@
+.admin-header { margin-bottom: 1.2rem; }
+
+.info-card { padding: 1.1rem; }
+.form-card { padding: 1.2rem; }
+
+.info-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.info-title {
+    font-size: 1.15rem;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+.info-title .vs {
+    color: #9ca3af;
+    margin: 0 0.45rem;
+    font-weight: 700;
+}
+
+.info-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.info-meta {
+    margin-top: 0.9rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+@media (max-width: 900px) {
+    .info-top { flex-direction: column; }
+    .info-meta { grid-template-columns: 1fr; }
+}
+
+.meta-item {
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(15, 23, 42, 0.22);
+    border-radius: 1rem;
+    padding: 0.75rem 0.85rem;
+}
+
+.meta-label {
+    font-size: 0.78rem;
+    color: #9ca3af;
+    margin-bottom: 0.35rem;
+}
+
+.meta-value {
+    font-weight: 900;
+    letter-spacing: 0.2px;
+}
+
+.meta-value .sep {
+    color: #9ca3af;
+    margin: 0 0.35rem;
+    font-weight: 700;
+}
+
+.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.82rem;
+    color: #cbd5e1;
+    word-break: break-all;
+}
+
+.readonly-pill {
+    border-radius: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(15, 23, 42, 0.28);
+    padding: 0.7rem 0.85rem;
+    font-weight: 900;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .form-grid { grid-template-columns: 1fr; }
+}
+
+.hint {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.odds-block {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.odds-title {
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+}
+
+.odds-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .odds-grid { grid-template-columns: 1fr; }
+}
+
+.field-error {
+    margin-top: 0.35rem;
+    font-size: 0.82rem;
+    color: #fca5a5;
+}
+
+.form-error-global {
+    margin-bottom: 0.9rem;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    background: rgba(248, 113, 113, 0.08);
+    padding: 0.75rem 0.9rem;
+}
+
+.odds-preview {
+    margin-top: 0.9rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(15, 23, 42, 0.22);
+    padding: 0.75rem 0.85rem;
+}
+
+.odds-preview-label {
+    font-size: 0.78rem;
+    color: #9ca3af;
+    margin-bottom: 0.45rem;
+}
+
+.odds-preview-value {
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(2, 6, 23, 0.35);
+    font-weight: 900;
+    font-size: 0.85rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+}
+
+
+/* Base badge (ако вече имаш .badge-status в main.css, остави само variant-ите) */
+.badge-status{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 0.78rem;
+    letter-spacing: 0.3px;
+    border: 1px solid rgba(148,163,184,0.18);
+    background: rgba(2,6,23,0.35);
+    color: #e5e7eb;
+}
+
+/* Variant-и по статус */
+.badge-status--scheduled{
+    border-color: rgba(56,189,248,0.35);
+    background: rgba(56,189,248,0.10);
+    color: #bae6fd;
+}
+
+.badge-status--progress{
+    border-color: rgba(251,191,36,0.35);
+    background: rgba(251,191,36,0.10);
+    color: #fde68a;
+}
+
+.badge-status--finished{
+    border-color: rgba(34,197,94,0.35);
+    background: rgba(34,197,94,0.10);
+    color: #bbf7d0;
+}
+
+.badge-status--cancelled{
+    border-color: rgba(248,113,113,0.35);
+    background: rgba(248,113,113,0.10);
+    color: #fecaca;
+}
+/* Base badge (ако вече имаш .badge-status в main.css, остави само variant-ите) */
+.badge-status{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 0.78rem;
+    letter-spacing: 0.3px;
+    border: 1px solid rgba(148,163,184,0.18);
+    background: rgba(2,6,23,0.35);
+    color: #e5e7eb;
+}
+
+/* Variant-и по статус */
+.badge-status--scheduled{
+    border-color: rgba(56,189,248,0.35);
+    background: rgba(56,189,248,0.10);
+    color: #bae6fd;
+}
+
+.badge-status--progress{
+    border-color: rgba(251,191,36,0.35);
+    background: rgba(251,191,36,0.10);
+    color: #fde68a;
+}
+
+.badge-status--finished{
+    border-color: rgba(34,197,94,0.35);
+    background: rgba(34,197,94,0.10);
+    color: #bbf7d0;
+}
+
+.badge-status--cancelled{
+    border-color: rgba(248,113,113,0.35);
+    background: rgba(248,113,113,0.10);
+    color: #fecaca;
+}
+.badge-status::before{
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.85;
+}
