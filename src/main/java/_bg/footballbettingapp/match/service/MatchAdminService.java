@@ -2,6 +2,7 @@ package _bg.footballbettingapp.match.service;
 
 import _bg.footballbettingapp.bet.service.BetService;
 import _bg.footballbettingapp.exception.DomainException;
+import _bg.footballbettingapp.exception.MatchEditException;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.model.MatchStatus;
 import _bg.footballbettingapp.match.repository.MatchRepository;
@@ -121,7 +122,7 @@ public class MatchAdminService {
 
     public EditMatchRequest mapToEditMatchRequest (Match match) {
        //  за GET заявката - взима данните за редактиране -> GET edit = “дай ми текущите данни, за да ги редактирам”
-//      мапва текущите данни на мача към дто
+//      мапва текущите данни на мача към дто, може да се направи в отделен мапър
 
 
         EditMatchRequest dto = new EditMatchRequest();
@@ -140,9 +141,19 @@ public class MatchAdminService {
 
         Match match = getMatchById(matchId);
 
-        if (match.getMatchStatus() == MatchStatus.FINISHED || match.getMatchStatus() == MatchStatus.CANCELLED) {
-            throw new DomainException("Match cannot be edited as it is finished or cancelled");
+        LocalDateTime now = LocalDateTime.now();
+
+        if (match.getMatchStatus() == MatchStatus.FINISHED || match.getMatchStatus() == MatchStatus.CANCELLED || match.getMatchStatus() == MatchStatus.IN_PROGRESS) {
+            throw new MatchEditException(matchId,"Match cannot be edited as it is finished, cancelled or in progress");
         }
+
+        if (!match.getStartTime().isAfter(now)) {
+            throw new MatchEditException(matchId,"Match cannot be edited as it is in the past");
+        }// не може да се редактира вече започнал мач
+
+        if (!dto.getStartTime().isAfter(now)) {
+            throw new MatchEditException(matchId,"Cannot set start time in the past");
+        }// не може да се задава стартов час в миналото
 
         match.setStartTime(dto.getStartTime());
         match.setOddHome(dto.getOddHome());
