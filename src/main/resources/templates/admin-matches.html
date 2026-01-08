@@ -56,6 +56,10 @@
 
                 <div class="admin-table-wrap" th:if="${!#lists.isEmpty(matches)}">
 
+                    <div class="form-error-global" th:if="${errorMessage != null}">
+                        <span th:text="${errorMessage}">Something went wrong</span>
+                    </div>
+
                     <table class="admin-table">
                         <thead>
                         <tr>

@@ -2,6 +2,8 @@ package _bg.footballbettingapp.match.service;
 
 import _bg.footballbettingapp.bet.service.BetService;
 import _bg.footballbettingapp.exception.DomainException;
+import _bg.footballbettingapp.exception.MatchCancelException;
+import _bg.footballbettingapp.exception.MatchCreateException;
 import _bg.footballbettingapp.exception.MatchEditException;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.model.MatchStatus;
@@ -82,13 +84,13 @@ public class MatchAdminService {
 
 
         if (homeTeamId.equals(awayTeamId)) {
-            throw new DomainException("Home and away teams cannot be the same");
+            throw new MatchCreateException("Home and away teams cannot be the same");
         }
 
         LocalDateTime now = LocalDateTime.now();
 
         if (createMatchRequest.getStartTime().isBefore(now.minusMinutes(1))) {
-            throw new DomainException("Match start time cannot be in the past");
+            throw new MatchCreateException("Match start time cannot be in the past");
         }
 
         BigDecimal oddHome = createMatchRequest.getOddHome();
@@ -97,7 +99,7 @@ public class MatchAdminService {
 
         if (oddHome.compareTo(new BigDecimal("1.00")) < 0 || oddDraw.compareTo(new BigDecimal("1.00")) < 0
                 || oddAway.compareTo(new BigDecimal("1.00")) < 0) {
-            throw new DomainException("Odds must be positive");
+            throw new MatchCreateException("Odds must be positive");
         }
 
         Match match = Match.builder()
@@ -162,6 +164,23 @@ public class MatchAdminService {
 
 
         matchRepository.save(match);
+
+    }
+
+    @Transactional
+    public void cancelMatch(UUID matchId) {
+
+        Match match = getMatchById(matchId);
+
+
+        if (match.getMatchStatus() == MatchStatus.FINISHED) {
+            throw new MatchCancelException(matchId, "Match cannot be cancelled after it has finished");
+        }
+
+
+        if (match.getMatchStatus() == MatchStatus.CANCELLED) {
+            throw new MatchCancelException(matchId, "Match is already cancelled");
+        }
 
     }
 

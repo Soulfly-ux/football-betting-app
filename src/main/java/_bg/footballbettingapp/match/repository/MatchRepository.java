@@ -23,6 +23,14 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
 
     boolean existsByHomeTeamAndAwayTeamAndStartTime(Team homeTeam, Team awayTeam, LocalDateTime startTime);
 
+    Optional<Match> findById(UUID matchId);
+
+
+
+
+
+
+
 
 
 
