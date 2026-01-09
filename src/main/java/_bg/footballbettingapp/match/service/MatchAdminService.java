@@ -1,5 +1,7 @@
 package _bg.footballbettingapp.match.service;
 
+import _bg.footballbettingapp.bet.model.Bet;
+import _bg.footballbettingapp.bet.model.BetStatus;
 import _bg.footballbettingapp.bet.service.BetService;
 import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.exception.MatchCancelException;
@@ -10,6 +12,8 @@ import _bg.footballbettingapp.match.model.MatchStatus;
 import _bg.footballbettingapp.match.repository.MatchRepository;
 import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.team.service.TeamService;
+import _bg.footballbettingapp.user.model.User;
+import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.CreateMatchRequest;
 import _bg.footballbettingapp.web.dto.EditMatchRequest;
 import jakarta.transaction.Transactional;
@@ -31,14 +35,16 @@ public class MatchAdminService {
     private final MatchRepository matchRepository;
     private final BetService betService;
     private final TeamService teamService;
+    private final UserService userService;
     private static final List<String> LEAGUES = List.of("Premier League",
             "La Liga", "Bundesliga", "Serie A", "Ligue 1","Champions League","Europa League", "Bulgarian Efbet League");
 
     @Autowired
-    public MatchAdminService(MatchRepository matchRepository, BetService betService, TeamService teamService) {
+    public MatchAdminService(MatchRepository matchRepository, BetService betService, TeamService teamService, UserService userService) {
         this.matchRepository = matchRepository;
         this.betService = betService;
         this.teamService = teamService;
+        this.userService = userService;
     }
 
 
@@ -173,6 +179,8 @@ public class MatchAdminService {
         Match match = getMatchById(matchId);
 
 
+
+
         if (match.getMatchStatus() == MatchStatus.FINISHED) {
             throw new MatchCancelException(matchId, "Match cannot be cancelled after it has finished");
         }
@@ -181,6 +189,38 @@ public class MatchAdminService {
         if (match.getMatchStatus() == MatchStatus.CANCELLED) {
             throw new MatchCancelException(matchId, "Match is already cancelled");
         }
+
+        if (match.getMatchStatus() == MatchStatus.IN_PROGRESS) {
+            throw new MatchCancelException(matchId, "Cannot cancel match in progress");
+        }
+
+
+
+        List<Bet> pendingBets = betService.getBetsByMatchAndStatus(match, BetStatus.PENDING);
+
+
+        LocalDateTime now = LocalDateTime.now();
+
+
+        for (Bet bet : pendingBets) {
+
+            User user = bet.getUser();
+
+            user.setBalance(user.getBalance().add(bet.getStake()));
+            bet.setBetStatus(BetStatus.CANCELLED);
+            bet.setSettledOn(now);
+
+            userService.save(user);
+            betService.save(bet);
+
+        }
+
+
+        match.setMatchStatus(MatchStatus.CANCELLED);
+        matchRepository.save(match);
+
+
+
 
     }
 

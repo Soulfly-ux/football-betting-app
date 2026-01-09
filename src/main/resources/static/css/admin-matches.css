@@ -133,3 +133,26 @@
 .hero-card{
     overflow: visible;
 }
+
+.row-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.row-actions .inline-form {
+    display: inline;
+    margin: 0;
+}
+
+.btn-danger {
+    background-color: #b91c1c;
+    border-color: #b91c1c;
+}
+
+.btn-danger:hover {
+    background-color: #991b1b;
+    border-color: #991b1b;
+}
+

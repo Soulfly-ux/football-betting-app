@@ -198,6 +198,13 @@ public class BetService {
 
         }
 
+        public List<Bet> getBetsByMatchAndStatus(Match match, BetStatus betStatus) {
+            return betRepository.findAllByMatchAndBetStatus(match, betStatus);
+        }
+
+    public void save(Bet bet) {
+        betRepository.save(bet);
     }
+}
 
 

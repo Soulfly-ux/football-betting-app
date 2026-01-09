@@ -127,20 +127,31 @@
 
                             <td class="right">
                                 <div class="row-actions">
+                                    <!-- Edit -->
                                     <a class="btn btn-outline btn-sm"
-                                       href="#"
                                        th:href="@{|/admin/matches/${m.id}/edit|}">
-
                                         Edit
                                     </a>
 
+                                    <!-- Finish -->
                                     <a class="btn btn-primary btn-sm"
-                                       href="#" th:href="@{|/admin/matches/${m.id}/finish|}">
-
+                                       th:href="@{|/admin/matches/${m.id}/finish|}">
                                         Finish
                                     </a>
+
+                                    <!-- Cancel -->
+                                    <form th:action="@{|/admin/matches/${m.id}/cancel|}"
+                                          method="post"
+                                          class="inline-form"
+                                          onsubmit="return confirm('Cancel this match and refund all pending bets?');">
+                                        <input type="hidden" name="_method" value="put"/>
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            Cancel
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
+
 
                         </tr>
                         </tbody>

@@ -181,4 +181,13 @@ public class AdminMatchesController {
 
          return new ModelAndView("redirect:/admin/matches");
     }
+
+
+    @PutMapping("/{id}/cancel")
+    public String cancelMatch(@PathVariable UUID id) {
+
+
+        matchAdminService.cancelMatch(id);
+        return ("redirect:/admin/matches");
+    }
 }
