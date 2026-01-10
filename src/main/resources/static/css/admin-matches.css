@@ -156,3 +156,37 @@
     border-color: #991b1b;
 }
 
+.badge-status {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.badge-status--scheduled {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #1d4ed8;
+}
+
+.badge-status--overdue {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #b45309;
+}
+
+.badge-status--inprogress {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #047857;
+}
+
+.badge-status--finished {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #15803d;
+}
+
+.badge-status--cancelled {
+    background-color: rgba(248, 113, 113, 0.1);
+    color: #b91c1c;
+}
+
+

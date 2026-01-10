@@ -18,5 +18,7 @@ public interface BetRepository extends JpaRepository<Bet, UUID> {
 
     List<Bet> findAllByMatchAndBetStatus(Match match, BetStatus betStatus);
 
+    long countByBetStatus(BetStatus betStatus);
+
 
 }

@@ -26,7 +26,7 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
     Optional<Match> findById(UUID matchId);
 
 
-
+   long countByMatchStatus(MatchStatus matchStatus);
 
 
 

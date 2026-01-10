@@ -116,12 +116,19 @@
                             </td>
 
                             <td class="center">
-                <span class="badge"  th:text="${m.matchStatus}"
-                      th:classappend="${m.matchStatus.name() == 'IN_PROGRESS' ? ' badge--info' : ' badge--neutral'}"
-                >
+                <span class="badge"  th:text="
+            ${m.matchStatus.name() == 'FINISHED'} ? 'Finished' :
+            (${m.matchStatus.name() == 'CANCELLED'} ? 'Cancelled' :
+            (${m.matchStatus.name() == 'IN_PROGRESS'} ? 'In progress' :
+            (${m.matchStatus.name() == 'SCHEDULED' and m.startTime.isBefore(now)} ? 'Overdue' : 'Scheduled')
+            ))"
+                      th:classappend="
+            ${m.matchStatus.name() == 'FINISHED'} ? ' badge-status--finished' :
+            (${m.matchStatus.name() == 'CANCELLED'} ? ' badge-status--cancelled' :
+            (${m.matchStatus.name() == 'IN_PROGRESS'} ? ' badge-status--inprogress' :
+            (${m.matchStatus.name() == 'SCHEDULED' and m.startTime.isBefore(now)} ? ' badge-status--overdue' : ' badge-status--scheduled')
+            ))">
 
-
-                  SCHEDULED
                 </span>
                             </td>
 

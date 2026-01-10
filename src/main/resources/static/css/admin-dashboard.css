@@ -1,0 +1,179 @@
+/* Лек tweak на header картата */
+.admin-header-card {
+    margin-bottom: 1.5rem;
+}
+
+.admin-header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.admin-current-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.admin-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #3b82f6, #22c55e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #0b1120;
+}
+
+.admin-user-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.admin-user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.admin-user-role {
+    font-size: 0.7rem;
+    color: #9ca3af;
+}
+
+.badge-role {
+    display: inline-block;
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.15);
+    color: #bfdbfe;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Stats grid */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-card {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 0.75rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.stat-sub {
+    font-size: 0.78rem;
+    color: #9ca3af;
+}
+
+/* Малки "пилчета" за активност */
+
+.stat-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.35rem;
+}
+
+.stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    font-size: 0.7rem;
+    color: #e5e7eb;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+}
+
+.dot--green {
+    background-color: #22c55e;
+}
+
+.dot--blue {
+    background-color: #3b82f6;
+}
+
+/* Quick links секция */
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quick-link-card {
+    display: block;
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 0.75rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    text-decoration: none;
+    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, border-color 0.1s ease-out;
+}
+
+.quick-link-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.8);
+    border-color: rgba(96, 165, 250, 0.7);
+}
+
+.quick-link-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.quick-link-sub {
+    font-size: 0.78rem;
+    color: #9ca3af;
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+    .admin-header-main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin-current-user {
+        align-self: stretch;
+        justify-content: flex-start;
+    }
+}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard · Football Betting App</title>
+
+    <!-- Базовият ти main.css -->
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+    <!-- Специфичен CSS за админ dashboard -->
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}" href="/css/admin-dashboard.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">FB</div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Admin Panel</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <!-- Линк към админ dashboard -->
+                <a class="nav-link active" th:href="@{/admin}">Dashboard</a>
+                <!-- Линк към админ потребители -->
+                <a class="nav-link" th:href="@{/admin/users}">Users</a>
+                <!-- Линк към админ мачове -->
+                <a class="nav-link" th:href="@{/admin/matches}">Matches</a>
+                <!-- Назад към user home (ако искаш) -->
+                <a class="nav-link" th:href="@{/home}">User view</a>
+                <!-- Logout -->
+                <a class="btn btn-outline" th:href="@{/logout}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="hero">
+        <div class="container">
+
+            <!-- Header / greeting -->
+            <section class="hero-card admin-header-card">
+                <div class="admin-header-main">
+                    <div>
+                        <div class="hero-kicker">
+                            <span>Admin dashboard</span>
+                        </div>
+                        <h1 class="hero-title">
+                            Overview &amp; controls
+                        </h1>
+                        <p class="hero-subtitle">
+                            Quick snapshot of users, bets and matches for the system.
+                        </p>
+                    </div>
+
+                    <div class="admin-current-user">
+                        <div class="admin-avatar">
+                            <span th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}">A</span>
+                        </div>
+                        <div class="admin-user-meta">
+                            <div class="admin-user-name" th:text="${user.username}">
+                                admin
+                            </div>
+                            <div class="admin-user-role">
+                                <span class="badge-role">Admin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats grid -->
+            <section class="hero-card">
+                <div class="hero-card-title">System stats</div>
+                <div class="hero-card-sub">
+                    High-level statistics for monitoring activity and health of the platform.
+                </div>
+
+                <div class="stats-grid">
+                    <!-- Users -->
+                    <div class="stat-card">
+                        <div class="stat-label">Users</div>
+                        <div class="stat-value" th:text="${stats.totalUsers}">0</div>
+                        <div class="stat-sub">
+                            Active:
+                            <span th:text="${stats.activeUsers}">0</span>
+                            &nbsp;·&nbsp;
+                            Admins:
+                            <span th:text="${stats.adminUsers}">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Bets -->
+                    <div class="stat-card">
+                        <div class="stat-label">Bets</div>
+                        <div class="stat-value" th:text="${stats.totalBets}">0</div>
+                        <div class="stat-sub">
+                            Pending:
+                            <span th:text="${stats.pendingBets}">0</span>
+                            &nbsp;·&nbsp;
+                            Won:
+                            <span th:text="${stats.wonBets}">0</span>
+                            &nbsp;·&nbsp;
+                            Lost:
+                            <span th:text="${stats.lostBets}">0</span>
+                            <br>
+                            Cancelled:
+                            <span th:text="${stats.cancelledBets}">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Matches -->
+                    <div class="stat-card">
+                        <div class="stat-label">Matches</div>
+                        <div class="stat-value" th:text="${stats.scheduledMatches + stats.inProgressMatches}">0</div>
+                        <div class="stat-sub">
+                            Scheduled:
+                            <span th:text="${stats.scheduledMatches}">0</span>
+                            &nbsp;·&nbsp;
+                            In progress:
+                            <span th:text="${stats.inProgressMatches}">0</span>
+                            <br>
+                            Finished:
+                            <span th:text="${stats.finishedMatches}">0</span>
+                            &nbsp;·&nbsp;
+                            Cancelled:
+                            <span th:text="${stats.cancelledMatches}">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Optional: activity indicator -->
+                    <div class="stat-card">
+                        <div class="stat-label">System activity</div>
+                        <div class="stat-pill-group">
+                            <span class="stat-pill">
+                                <span class="dot dot--green"></span>
+                                Backend running
+                            </span>
+                            <span class="stat-pill">
+                                <span class="dot dot--blue"></span>
+                                Manual control
+                            </span>
+                        </div>
+                        <div class="stat-sub">
+                            This section can later be extended with scheduler info
+                            (e.g. auto status updates).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick links -->
+            <section class="hero-card">
+                <div class="hero-card-title">Quick actions</div>
+                <div class="quick-links">
+                    <a class="quick-link-card" th:href="@{/admin/users}">
+                        <div class="quick-link-title">Manage users</div>
+                        <div class="quick-link-sub">
+                            View all users, toggle roles and activate / deactivate accounts.
+                        </div>
+                    </a>
+                    <a class="quick-link-card" th:href="@{/admin/matches}">
+                        <div class="quick-link-title">Manage matches</div>
+                        <div class="quick-link-sub">
+                            Create, edit, finish or cancel matches and update odds.
+                        </div>
+                    </a>
+                    <a class="quick-link-card" th:href="@{/matches}">
+                        <div class="quick-link-title">View public matches</div>
+                        <div class="quick-link-sub">
+                            Open the public matches view as a normal user would see it.
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Admin Dashboard · Internal overview for the Football Betting App.
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

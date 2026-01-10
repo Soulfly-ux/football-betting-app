@@ -19,9 +19,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByRole(Role role);
 
-    int countByRole(Role role);
+    long countByRole(Role role);
 
     Role role(Role role);
 
-    int countByIsActive(boolean b);
+    long countByIsActive(boolean b);
+
+
 }

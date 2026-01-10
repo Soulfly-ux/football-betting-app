@@ -4,6 +4,7 @@ import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.user.model.Role;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.repository.UserRepository;
+import _bg.footballbettingapp.web.dto.AdminDashboardStats;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -44,7 +45,7 @@ public class UserAdminService {
 
           User user = getUserById(targetUserId);
 
-          int adminCount = userRepository.countByRole(Role.ADMIN);
+          long adminCount = userRepository.countByRole(Role.ADMIN);
 
 
           if(adminCount == 1 && user.getRole() == Role.ADMIN) {
@@ -81,4 +82,10 @@ public class UserAdminService {
       public long countAdmins() {
           return userRepository.countByRole(Role.ADMIN);
       }
+
+
+     public long countUsers() {
+        return userRepository.count();
+     }
+
 }

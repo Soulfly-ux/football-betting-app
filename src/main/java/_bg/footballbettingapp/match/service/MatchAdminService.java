@@ -219,10 +219,17 @@ public class MatchAdminService {
         match.setMatchStatus(MatchStatus.CANCELLED);
         matchRepository.save(match);
 
-
-
-
     }
+
+
+    public long countAll() {
+        return matchRepository.count();
+    }
+
+    public long countByStatus(MatchStatus status) {
+        return matchRepository.countByMatchStatus(status);
+    }
+
 
 
 }

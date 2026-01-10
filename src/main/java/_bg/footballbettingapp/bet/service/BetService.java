@@ -205,6 +205,15 @@ public class BetService {
     public void save(Bet bet) {
         betRepository.save(bet);
     }
+
+    public long countByBetStatus(BetStatus betStatus) {
+        return betRepository.countByBetStatus(betStatus);
+    }
+
+
+    public long countAllBets() {
+        return betRepository.count();
+    }
 }
 
 
