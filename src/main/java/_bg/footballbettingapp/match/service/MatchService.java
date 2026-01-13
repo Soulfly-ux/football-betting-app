@@ -8,6 +8,7 @@ import _bg.footballbettingapp.match.repository.MatchRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,9 +27,11 @@ public class MatchService {
         this.matchRepository = matchRepository;
     }
 
-
+    @Cacheable("upcomingMatches")
     public List<Match> getUpcomingMatches() {
         LocalDateTime now = LocalDateTime.now();
+
+        System.out.println("Hitting DB for upcoming matches");
 
         return matchRepository.findAllByMatchStatusAndStartTimeAfterOrderByStartTimeAsc(MatchStatus.SCHEDULED,now);
     }

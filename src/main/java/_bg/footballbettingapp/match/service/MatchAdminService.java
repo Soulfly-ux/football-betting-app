@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -51,7 +52,7 @@ public class MatchAdminService {
     public List<Match> getAdminOpenMatches() {
         return matchRepository.findAllByMatchStatusInOrderByStartTimeAsc(List.of(MatchStatus.SCHEDULED, MatchStatus.IN_PROGRESS));
     }
-
+    @CacheEvict(value = "upcomingMatches", allEntries = true)
     @Transactional
     public void finishMatch(UUID id, Integer homeGoals, Integer awayGoals) {
         Match match = matchRepository.findById(id)
@@ -79,7 +80,7 @@ public class MatchAdminService {
         return LEAGUES;
     }
 
-
+    @CacheEvict(value = "upcomingMatches", allEntries = true)
     public void createNewMatch(CreateMatchRequest createMatchRequest) {
 
         UUID homeTeamId = createMatchRequest.getHomeTeamId();
@@ -143,7 +144,7 @@ public class MatchAdminService {
         return dto;
     }
 
-
+    @CacheEvict(value = "upcomingMatches", allEntries = true)
     public void editMatch(EditMatchRequest dto, UUID matchId) {
        // за PUT заявката -> PUT edit = “ето новите данни, запази ги”
 
@@ -172,7 +173,7 @@ public class MatchAdminService {
         matchRepository.save(match);
 
     }
-
+    @CacheEvict(value = "upcomingMatches", allEntries = true)
     @Transactional
     public void cancelMatch(UUID matchId) {
 
@@ -229,7 +230,7 @@ public class MatchAdminService {
     public long countByStatus(MatchStatus status) {
         return matchRepository.countByMatchStatus(status);
     }
-
+    @CacheEvict(value = "upcomingMatches", allEntries = true)
     @Transactional
     public void markScheduledMatchesAsInProgress() {
         LocalDateTime now = LocalDateTime.now();

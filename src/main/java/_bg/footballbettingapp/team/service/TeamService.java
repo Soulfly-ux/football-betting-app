@@ -4,6 +4,7 @@ import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.team.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class TeamService {
         return teamRepository.findById(id)
                 .orElseThrow(() -> new DomainException("Team not found: '" + id + "'"));
     }
-
+    @Cacheable("teamsSortedByName")
     public List<Team> getAllTeamSortedByName() {
         return teamRepository.findAllByOrderByNameAsc();
     }

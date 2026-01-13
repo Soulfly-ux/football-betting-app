@@ -112,4 +112,16 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
+
+    @ExceptionHandler(DomainException.class)
+    public ModelAndView handleDomainException(DomainException exception) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("error");
+        modelAndView.addObject("errorMessage", exception.getMessage());
+
+        return modelAndView;
+
+    }
+
 }
