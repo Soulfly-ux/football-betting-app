@@ -230,6 +230,26 @@ public class MatchAdminService {
         return matchRepository.countByMatchStatus(status);
     }
 
+    @Transactional
+    public void markScheduledMatchesAsInProgress() {
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Match> scheduledMatches = matchRepository.findAllByMatchStatusAndStartTimeLessThanEqual(MatchStatus.SCHEDULED, now);
 
 
+        for (Match match : scheduledMatches) {
+            match.setMatchStatus(MatchStatus.IN_PROGRESS);
+            matchRepository.save(match);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+

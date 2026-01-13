@@ -68,7 +68,7 @@ public class BetController {
         );
 
 
-        return new ModelAndView("redirect:/my-bets");
+        return new ModelAndView("redirect:/bets/my-bets");
 
     }
 
