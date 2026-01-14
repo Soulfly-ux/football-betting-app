@@ -1,0 +1,63 @@
+.error-card {
+    max-width: 640px;
+    margin: 2rem auto;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    background: radial-gradient(circle at top left, rgba(248, 113, 113, 0.15), transparent 55%),
+    rgba(15, 23, 42, 0.95);
+}
+
+.error-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.error-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 2px solid rgba(248, 113, 113, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #fecaca;
+}
+
+.error-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+
+.error-subtitle {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.error-message {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #e5e7eb;
+}
+
+.error-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+    .error-card {
+        margin: 1rem;
+    }
+
+    .error-header {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
