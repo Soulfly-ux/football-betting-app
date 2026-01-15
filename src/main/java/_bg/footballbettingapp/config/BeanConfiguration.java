@@ -11,21 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class BeanConfiguration {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/", "/register", "/login",
-                                "/css/**", "/js/**", "/images/**"
-                        ).permitAll()
-                        .anyRequest().permitAll() // засега никакъв login
-                );
 
-        // Махаш formLogin/Logout за момента – няма нужда
-        return http.build();
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
