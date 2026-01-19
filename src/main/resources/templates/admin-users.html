@@ -153,6 +153,10 @@
                                     <form th:method="POST" th:action="@{|/admin/users/${u.id}/role|}"
                                     >
 
+                                        <input type="hidden"
+                                               th:name="${_csrf.parameterName}"
+                                               th:value="${_csrf.token}" />
+
                                         <input type="hidden" name="_method" value="put"/>
 
                                         <button class="btn btn-outline btn-sm"
@@ -166,6 +170,9 @@
                                     <!-- Toggle active -->
                                     <form th:method="POST" th:action="@{|/admin/users/${u.id}/status|}"
                                     >
+                                        <input type="hidden"
+                                               th:name="${_csrf.parameterName}"
+                                               th:value="${_csrf.token}" />
 
                                         <input type="hidden" name="_method" value="put"/>
 

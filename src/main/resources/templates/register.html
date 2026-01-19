@@ -21,8 +21,8 @@
                 </div>
             </div>
             <nav class="nav-links">
-                <a class="nav-link" th:href="@{/home.html}">Home</a>
-                <a class="nav-link" th:href="@{/matches}">Matches</a>
+<!--                <a class="nav-link" th:href="@{/home.html}">Home</a>-->
+<!--                <a class="nav-link" th:href="@{/matches}">Matches</a>-->
                 <a class="btn btn-outline" th:href="@{/login}">Log in</a>
             </nav>
         </div>
@@ -43,6 +43,11 @@
             </div>
 
             <form th:action="@{/register}" method="POST" th:object="${registerRequest}">
+
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+
                 <div class="form-grid">
 
                     <div class="form-group">

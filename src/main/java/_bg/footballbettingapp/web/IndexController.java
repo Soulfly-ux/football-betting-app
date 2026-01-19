@@ -1,5 +1,6 @@
 package _bg.footballbettingapp.web;
 
+import _bg.footballbettingapp.security.AuthenticationDetails;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.LoginRequest;
@@ -8,12 +9,10 @@ import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.UUID;
@@ -39,11 +38,16 @@ public class IndexController {
 
 
     @GetMapping("/login")
-    public ModelAndView login() {
+    public ModelAndView login(@RequestParam(value = "error", required = false) String error) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
+
+
+        if (error != null) {
+            modelAndView.addObject("error", "Invalid username or password");
+        }
 
         return modelAndView;
     }
@@ -94,11 +98,11 @@ public class IndexController {
 
 
     @GetMapping("/home")
-    public ModelAndView home(HttpSession session) {
+    public ModelAndView home(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
         ModelAndView modelAndView = new ModelAndView();
 
-        UUID userId = (UUID) session.getAttribute("user");
-        User currentUser = userService.getUserById(userId);
+
+        User currentUser = userService.getUserById(authenticationDetails.getUserId());
 
         modelAndView.addObject("user", currentUser);
         modelAndView.setViewName("home");
