@@ -52,21 +52,7 @@ public class IndexController {
         return modelAndView;
     }
 
-    @PostMapping("/login")
-    public ModelAndView login(@Valid LoginRequest loginRequest, BindingResult bindingResult, HttpSession session) {
 
-        if(bindingResult.hasErrors()) {
-            return new ModelAndView("login");
-        }
-
-        User loggedInUser = userService.login(loginRequest);
-        session.setAttribute("user", loggedInUser.getId());
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("user", loggedInUser);
-        modelAndView.setViewName("redirect:/home");
-
-        return modelAndView;
-    }
 
 
 

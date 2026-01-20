@@ -4,12 +4,14 @@ import _bg.footballbettingapp.bet.model.Bet;
 import _bg.footballbettingapp.bet.service.BetService;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.service.MatchService;
+import _bg.footballbettingapp.security.AuthenticationDetails;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.BetRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,10 +41,10 @@ public class BetController {
     }
 
     @PostMapping
-    public ModelAndView placeBet(@Valid BetRequest betRequest, BindingResult bindingResult, HttpSession session) {
+    public ModelAndView placeBet(@Valid BetRequest betRequest, BindingResult bindingResult,@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
 
-        UUID userId = (UUID) session.getAttribute("user");
+        UUID userId = authenticationDetails.getUserId();
 
 
         if (bindingResult.hasErrors()) {
@@ -74,11 +76,11 @@ public class BetController {
 
 
     @GetMapping("/my-bets")
-    public ModelAndView myBets(HttpSession session) {
+    public ModelAndView myBets(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
 
-        UUID userId = (UUID) session.getAttribute("user");
-        User user = userService.getUserById(userId);
+
+        User user = userService.getUserById(authenticationDetails.getUserId());
 
 
         List<Bet> betsByUser = betService.getBetsByUser(user);

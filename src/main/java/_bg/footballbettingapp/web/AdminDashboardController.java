@@ -1,12 +1,14 @@
 package _bg.footballbettingapp.web;
 
 
+import _bg.footballbettingapp.security.AuthenticationDetails;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.AdminDashboardService;
 import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.AdminDashboardStats;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +31,10 @@ public class AdminDashboardController {
 
 
     @GetMapping
-    public ModelAndView showAdminDashboard(HttpSession session) {
+    public ModelAndView showAdminDashboard(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
-        UUID userId = (UUID) session.getAttribute("user");
-        User userById = userService.getUserById(userId);
+
+        User userById = userService.getUserById(authenticationDetails.getUserId());
 
         AdminDashboardStats stats = adminDashboardService.getStats();
 

@@ -1,11 +1,13 @@
 package _bg.footballbettingapp.web;
 
 import _bg.footballbettingapp.common.model.Country;
+import _bg.footballbettingapp.security.AuthenticationDetails;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.EditProfileRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +33,9 @@ public class UserController {
 
 
     @GetMapping("/edit")
-    public ModelAndView getEditProfilePage(HttpSession session) {
+    public ModelAndView getEditProfilePage(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
-        UUID userId = (UUID) session.getAttribute("user"); // вземам id на сесията на даден потребител
+        UUID userId = authenticationDetails.getUserId();
         User currentUser = userService.getUserById(userId);   // вземам user
         EditProfileRequest editProfileRequest = userService.getCurrentUserProfile(userId);
 
@@ -47,10 +49,10 @@ public class UserController {
     }
 
     @PutMapping("/edit")
-    public ModelAndView editProfile(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, HttpSession session) {
+    public ModelAndView editProfile(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
-        UUID userId = (UUID) session.getAttribute("user");
 
+        UUID userId = authenticationDetails.getUserId();
 
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView();

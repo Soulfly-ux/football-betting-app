@@ -3,6 +3,7 @@ package _bg.footballbettingapp.web;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.service.MatchAdminService;
 import _bg.footballbettingapp.match.service.MatchService;
+import _bg.footballbettingapp.security.AuthenticationDetails;
 import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.team.service.TeamService;
 import _bg.footballbettingapp.user.model.User;
@@ -13,6 +14,7 @@ import _bg.footballbettingapp.web.dto.FinishMatchRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +42,11 @@ public class AdminMatchesController {
      }
 
     @GetMapping
-    public ModelAndView getMatches(HttpSession session) {
+    public ModelAndView getMatches(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
 
-        UUID userId = (UUID) session.getAttribute("user");
-        User user = userService.getUserById(userId);
+
+        User user = userService.getUserById(authenticationDetails.getUserId());
 
 
 
