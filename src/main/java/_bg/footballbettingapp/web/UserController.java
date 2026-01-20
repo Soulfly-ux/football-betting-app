@@ -36,7 +36,11 @@ public class UserController {
     public ModelAndView getEditProfilePage(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
         UUID userId = authenticationDetails.getUserId();
-        User currentUser = userService.getUserById(userId);   // вземам user
+
+
+
+      //  User currentUser = userService.getUserById(userId);   // вземам user
+
         EditProfileRequest editProfileRequest = userService.getCurrentUserProfile(userId);
 
         ModelAndView modelAndView = new ModelAndView();
