@@ -171,6 +171,7 @@
                                         <input type="hidden" name="_method" value="put"/>
 
                                         <button class="btn btn-outline btn-sm"
+                                                sec:authorize="hasRole('ADMIN')"
                                                 type="submit"
                                                 th:text="${u.role.name() == 'ADMIN' ? 'Make User' : 'Make Admin'}"
                                                 th:disabled="${u.id == sessionUserId}">
@@ -188,6 +189,7 @@
                                         <input type="hidden" name="_method" value="put"/>
 
                                         <button class="btn btn-primary btn-sm"
+                                                sec:authorize="hasRole('ADMIN')"
                                                 type="submit"
                                                 th:text="${u.active ? 'Disable' : 'Enable'}"
                                                 th:classappend="${u.active ? ' btn-danger' : ''}"

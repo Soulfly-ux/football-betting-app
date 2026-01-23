@@ -203,7 +203,9 @@
                         <a class="form-link" th:href="@{/matches}">
                             ← Back to matches
                         </a>
-                        <button type="submit" class="btn btn-primary" th:href="@{/bets/my-bets}">
+                        <button type="submit" class="btn btn-primary"
+                                sec:authorize="isAuthenticated()"
+                                th:href="@{/bets/my-bets}">
                             Place bet
                         </button>
                     </div>

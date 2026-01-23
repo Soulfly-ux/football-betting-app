@@ -159,8 +159,8 @@
           </div>
 
           <div class="form-actions">
-            <a class="btn btn-outline" th:href="@{/admin/matches}">Cancel</a>
-            <button class="btn btn-primary" type="submit">Create match</button>
+            <a class="btn btn-outline" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/matches}">Cancel</a>
+            <button class="btn btn-primary" sec:authorize="hasRole('ADMIN')" type="submit">Create match</button>
           </div>
 
         </form>
