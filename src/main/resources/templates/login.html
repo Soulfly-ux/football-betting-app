@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Login · Football Betting App</title>
@@ -23,7 +24,7 @@
             <nav class="nav-links">
                 <a class="nav-link" th:href="@{/home}">Home</a>
                 <a class="nav-link" th:href="@{/matches}">Matches</a>
-                <a class="btn btn-primary" th:href="@{/register}">Sign up</a>
+                <a class="btn btn-primary" sec:authorize="isAnonymous()" th:href="@{/register}">Sign up</a>
             </nav>
         </div>
     </header>

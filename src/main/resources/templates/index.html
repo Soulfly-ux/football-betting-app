@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Welcome · Football Betting App</title>
@@ -22,8 +23,8 @@
             </div>
             <nav class="nav-links">
                 <a class="nav-link active" th:href="@{/home}">Home</a>
-                <a class="btn btn-outline" th:href="@{/login}">Log in</a>
-                <a class="btn btn-primary" th:href="@{/register}">Sign up</a>
+                <a class="btn btn-outline" sec:authorize="isAnonymous()" th:href="@{/login}">Log in</a>
+                <a class="btn btn-primary" sec:authorize="isAnonymous()" th:href="@{/register}">Sign up</a>
             </nav>
         </div>
     </header>
@@ -47,17 +48,17 @@
                     </p>
 
                     <div class="hero-cta">
-                        <a class="btn btn-primary" th:href="@{/register}">
+                        <a class="btn btn-primary" sec:authorize="isAnonymous()" th:href="@{/register}">
                             Sign up & get demo balance
                         </a>
-                        <a class="btn btn-outline" th:href="@{/login}">
+                        <a class="btn btn-outline" sec:authorize="isAnonymous()" th:href="@{/login}">
                             I already have an account
                         </a>
                     </div>
 
                     <div class="hero-meta">
                         <div class="hero-meta-item">
-                            <span class="hero-meta-label">For recruiters</span>
+                            <span class="hero-meta-label"></span>
                             <span class="hero-meta-value">
                                 Clean code · Domain logic · JPA · Thymeleaf
                             </span>
@@ -65,7 +66,7 @@
                         <div class="hero-meta-item">
                             <span class="hero-meta-label">For you</span>
                             <span class="hero-meta-value">
-                                One solid project to show on CV & GitHub
+
                             </span>
                         </div>
                     </div>

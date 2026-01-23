@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Edit profile · Football Betting App</title>
@@ -24,10 +25,10 @@
             <nav class="nav-links">
                 <a class="nav-link" th:href="@{/home}">Home</a>
                 <a class="nav-link" th:href="@{/matches}">Matches</a>
-                <a class="nav-link" th:href="@{/bets/my-bets}">My Bets</a>
-                <a class="nav-link active" th:href="@{/profile/edit}">Edit profile</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/bets/my-bets}">My Bets</a>
+                <a class="nav-link active" sec:authorize="isAuthenticated()" th:href="@{/profile/edit}">Edit profile</a>
                 <!-- по-късно можеш да вържеш реален logout -->
-                <form th:action="@{/logout}" method="post">
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
                     <input type="hidden"
                            th:name="${_csrf.parameterName}"
                            th:value="${_csrf.token}" />
