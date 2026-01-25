@@ -30,6 +30,8 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
 
    List<Match> findAllByMatchStatusAndStartTimeLessThanEqual(MatchStatus matchStatus, LocalDateTime now);
 
+   long countByMatchStatusAndStartTimeBefore(MatchStatus matchStatus, LocalDateTime now);
+
 
 
 

@@ -53,7 +53,7 @@ public class AdminUserController {
         modelAndView.addObject("users", users);
         modelAndView.addObject("activeCount", countActiveUsers);
         modelAndView.addObject("adminsCount", admins);
-        modelAndView.addObject("sessionUserId ", authenticationDetails.getUserId());
+        modelAndView.addObject("sessionUserId", authenticationDetails.getUserId());
         modelAndView.addObject("user",userById);
 
         return modelAndView;

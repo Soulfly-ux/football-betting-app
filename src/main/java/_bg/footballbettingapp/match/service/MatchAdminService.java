@@ -243,6 +243,13 @@ public class MatchAdminService {
             matchRepository.save(match);
         }
     }
+
+    public long countOverdueMatches() {
+        LocalDateTime now = LocalDateTime.now();
+
+
+        return matchRepository.countByMatchStatusAndStartTimeBefore(MatchStatus.SCHEDULED, now);
+    }
 }
 
 

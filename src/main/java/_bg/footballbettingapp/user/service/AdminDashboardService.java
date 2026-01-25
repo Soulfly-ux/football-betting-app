@@ -29,6 +29,8 @@ public class AdminDashboardService {
         AdminDashboardStats stats = new AdminDashboardStats();
 
 
+
+
         stats.setTotalUsers(userAdminService.countUsers());
         stats.setAdminUsers(userAdminService.countAdmins());
         stats.setActiveUsers(userAdminService.countActiveUsers());
@@ -48,8 +50,7 @@ public class AdminDashboardService {
         stats.setCancelledMatches(matchAdminService.countByStatus(MatchStatus.CANCELLED));
         stats.setScheduledMatches(matchAdminService.countByStatus(MatchStatus.SCHEDULED));
 
-
-
+         stats.setOverdueMatches(matchAdminService.countOverdueMatches());
 
         return stats;
     }

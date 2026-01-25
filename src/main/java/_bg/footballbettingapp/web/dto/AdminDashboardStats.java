@@ -28,6 +28,7 @@ public class AdminDashboardStats {
     private long finishedMatches;
     private long cancelledMatches;
     private long scheduledMatches;
+    private long overdueMatches;
 
 
 
