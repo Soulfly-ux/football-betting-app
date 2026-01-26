@@ -52,12 +52,23 @@ public class AdminMatchesController {
 
         List<Match> adminOpenMatches = matchAdminService.getAdminOpenMatches();
 
+        List<Match> overdueMatches = matchAdminService.getOverdueMatches();
+        List<Match> scheduledMatches = matchAdminService.getScheduledMatches();
+        List<Match> inProgressMatches = matchAdminService.getInProgressMatches();
+        List<Match> finishedMatches = matchAdminService.getFinishedMatches();
+        List<Match> cancelledMatches = matchAdminService.getCancelledMatches();
+
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin-matches");
         modelAndView.addObject("matches", adminOpenMatches );
         modelAndView.addObject("user", user);
         modelAndView.addObject("now", LocalDateTime.now());
+        modelAndView.addObject("overdueMatches", overdueMatches);
+        modelAndView.addObject("scheduledMatches", scheduledMatches);
+        modelAndView.addObject("inProgressMatches", inProgressMatches);
+        modelAndView.addObject("finishedMatches", finishedMatches);
+        modelAndView.addObject("cancelledMatches", cancelledMatches);
 
 
 

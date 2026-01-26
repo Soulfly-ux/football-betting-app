@@ -250,6 +250,36 @@ public class MatchAdminService {
 
         return matchRepository.countByMatchStatusAndStartTimeBefore(MatchStatus.SCHEDULED, now);
     }
+
+
+    public List<Match> getScheduledMatches() {
+
+        LocalDateTime startTime = LocalDateTime.now();
+
+        return matchRepository.findAllByMatchStatusAndStartTimeIsGreaterThanEqual(MatchStatus.SCHEDULED, startTime);
+    }
+
+    public List<Match> getInProgressMatches() {
+        return matchRepository.findAllByMatchStatusOrderByStartTimeAsc(MatchStatus.IN_PROGRESS);
+    }
+
+    public List<Match> getFinishedMatches() {
+        return matchRepository.findAllByMatchStatusOrderByStartTimeDesc(MatchStatus.FINISHED);
+    }
+
+    public List<Match> getCancelledMatches() {
+        return matchRepository.findAllByMatchStatusOrderByStartTimeDesc(MatchStatus.CANCELLED);
+    }
+
+    public  List<Match> getOverdueMatches() {
+        LocalDateTime now = LocalDateTime.now();
+
+
+        return matchRepository.findAllByMatchStatusAndStartTimeBeforeOrderByStartTimeAsc(MatchStatus.SCHEDULED, now);
+    }
+
+
+
 }
 
 
