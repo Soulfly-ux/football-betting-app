@@ -164,7 +164,7 @@ public class BetService {
         Integer awayGoals = match.getAwayGoals();
 
         if (homeGoals == null || awayGoals == null) {
-            throw new DomainException("N/A");
+            throw new DomainException("Match goals are missing. Cannot settle bets.");
         }
 
 
@@ -186,12 +186,12 @@ public class BetService {
 
                 user.setBalance(user.getBalance().add(bet.getPotentialWinningAmount()));
 
-                userService.save(user);
+//                userService.save(user);
             }else {
                 bet.setBetStatus(BetStatus.LOST);
                 bet.setSettledOn(now);
             }
-            betRepository.save(bet);
+//            betRepository.save(bet);
 
             }
 

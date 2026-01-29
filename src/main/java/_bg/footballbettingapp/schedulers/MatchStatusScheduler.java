@@ -16,8 +16,10 @@ public class MatchStatusScheduler {
         this.matchAdminService = matchAdminService;
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedDelay = 60000)
     public void updateMatchStatus() {
+
+
         matchAdminService.markScheduledMatchesAsInProgress();
     }
 }

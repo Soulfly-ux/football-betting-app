@@ -63,15 +63,15 @@
                 <div class="admin-empty">No matches found.</div>
             </section>
 
-            <!-- Global error message (ако имаш) -->
+
             <section class="hero-card" th:if="${errorMessage != null}">
                 <div class="form-error-global">
                     <span th:text="${errorMessage}">Something went wrong</span>
                 </div>
             </section>
-
+            <div class="status-grid">
             <!-- OVERDUE -->
-            <section class="hero-card" th:if="${!#lists.isEmpty(overdueMatches)}">
+            <section class="hero-card status-wide" th:if="${!#lists.isEmpty(overdueMatches)}">
                 <div class="hero-card-title">Overdue</div>
                 <div class="hero-card-sub">Scheduled, but start time is already in the past.</div>
 
@@ -112,9 +112,14 @@
                             </td>
                             <td class="right">
                                 <div class="row-actions">
-                                    <a class="btn btn-outline btn-sm" th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
-                                    <a class="btn btn-primary btn-sm" th:href="@{|/admin/matches/${m.id}/finish|}">Finish</a>
-                                    <form th:action="@{|/admin/matches/${m.id}/cancel|}"
+                                    <a class="btn btn-outline btn-sm"
+                                       th:if="${m.matchStatus.name() == 'SCHEDULED'}"
+                                       th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
+                                    <a class="btn btn-primary btn-sm"
+                                       th:if="${m.matchStatus.name() == 'IN_PROGRESS'}"
+                                       th:href="@{|/admin/matches/${m.id}/finish|}">Finish</a>
+                                    <form  th:if="${m.matchStatus.name() == 'SCHEDULED'}"
+                                            th:action="@{|/admin/matches/${m.id}/cancel|}"
                                           method="post" class="inline-form"
                                           onsubmit="return confirm('Cancel this match and refund all pending bets?');">
                                         <input type="hidden" name="_method" value="put"/>
@@ -171,9 +176,14 @@
                             </td>
                             <td class="right">
                                 <div class="row-actions">
-                                    <a class="btn btn-outline btn-sm" th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
-                                    <a class="btn btn-primary btn-sm" th:href="@{|/admin/matches/${m.id}/finish|}">Finish</a>
-                                    <form th:action="@{|/admin/matches/${m.id}/cancel|}"
+                                    <a class="btn btn-outline btn-sm"
+                                       th:if="${m.matchStatus.name() == 'SCHEDULED'}"
+                                       th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
+                                    <a class="btn btn-primary btn-sm"
+                                       th:if="${m.matchStatus.name() == 'IN_PROGRESS'}"
+                                       th:href="@{|/admin/matches/${m.id}/finish|}">Finish</a>
+                                    <form  th:if="${m.matchStatus.name() == 'SCHEDULED'}"
+                                            th:action="@{|/admin/matches/${m.id}/cancel|}"
                                           method="post" class="inline-form"
                                           onsubmit="return confirm('Cancel this match and refund all pending bets?');">
                                         <input type="hidden" name="_method" value="put"/>
@@ -230,9 +240,14 @@
                             </td>
                             <td class="right">
                                 <div class="row-actions">
-                                    <a class="btn btn-outline btn-sm" th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
-                                    <a class="btn btn-primary btn-sm" th:href="@{|/admin/matches/${m.id}/finish|}">Finish</a>
-                                    <form th:action="@{|/admin/matches/${m.id}/cancel|}"
+                                    <a class="btn btn-outline btn-sm"
+                                       th:if="${m.matchStatus.name() == 'SCHEDULED'}"
+                                       th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
+                                    <a class="btn btn-primary btn-sm"
+                                       th:if="${m.matchStatus.name() == 'IN_PROGRESS'}"
+                                        th:href="@{|/admin/matches/${m.id}/finish|}">Finish</a>
+                                    <form  th:if="${m.matchStatus.name() == 'SCHEDULED'}"
+                                            th:action="@{|/admin/matches/${m.id}/cancel|}"
                                           method="post" class="inline-form"
                                           onsubmit="return confirm('Cancel this match and refund all pending bets?');">
                                         <input type="hidden" name="_method" value="put"/>
@@ -288,9 +303,11 @@
                                 <span class="badge badge-status--finished">Finished</span>
                             </td>
                             <td class="right">
-                                <div class="row-actions">
-                                    <a class="btn btn-outline btn-sm" th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
-                                </div>
+<!--                                <div class="row-actions">-->
+<!--                                    <a class="btn btn-outline btn-sm"-->
+<!--                                       th:if="${m.matchStatus.name() != 'FINISHED' and m.matchStatus.name() != 'CANCELLED'}"-->
+<!--                                       th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>-->
+<!--                                </div>-->   -----
                             </td>
                         </tr>
                         </tbody>
@@ -343,16 +360,18 @@
                                 <span class="badge badge-status--cancelled">Cancelled</span>
                             </td>
                             <td class="right">
-                                <div class="row-actions">
-                                    <a class="btn btn-outline btn-sm" th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>
-                                </div>
+<!--                                <div class="row-actions">-->
+<!--                                    <a class="btn btn-outline btn-sm"-->
+<!--                                       th:if="${m.matchStatus.name() != 'FINISHED' and m.matchStatus.name() != 'CANCELLED'}"-->
+<!--                                       th:href="@{|/admin/matches/${m.id}/edit|}">Edit</a>-->
+<!--                                </div>-->    -----
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
-
+            </div>
 
             <div class="form-footer" style="margin-top: 1rem;">
                 <a class="form-link" th:href="@{/admin}">← Back to admin dashboard</a>

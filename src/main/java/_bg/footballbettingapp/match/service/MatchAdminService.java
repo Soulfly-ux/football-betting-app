@@ -65,12 +65,17 @@ public class MatchAdminService {
             throw new DomainException("Match is already cancelled");
         }
 
+        if (match.getMatchStatus() != MatchStatus.IN_PROGRESS){
+            throw new DomainException("Match is not in progress");
+
+        }
+
 
         match.setHomeGoals(homeGoals);
         match.setAwayGoals(awayGoals);
         match.setMatchStatus(MatchStatus.FINISHED);
 
-        matchRepository.saveAndFlush(match);
+        matchRepository.save(match);
 
         betService.settleBetForMatch(id);
 
@@ -144,7 +149,8 @@ public class MatchAdminService {
         return dto;
     }
 
-    @CacheEvict(value = "upcomingMatches", allEntries = true)
+     @CacheEvict(value = "upcomingMatches", allEntries = true)
+     @Transactional
     public void editMatch(EditMatchRequest dto, UUID matchId) {
        // за PUT заявката -> PUT edit = “ето новите данни, запази ги”
 
@@ -238,10 +244,16 @@ public class MatchAdminService {
         List<Match> scheduledMatches = matchRepository.findAllByMatchStatusAndStartTimeLessThanEqual(MatchStatus.SCHEDULED, now);
 
 
+        if (scheduledMatches.isEmpty()) {
+            return;
+        }
+
         for (Match match : scheduledMatches) {
             match.setMatchStatus(MatchStatus.IN_PROGRESS);
-            matchRepository.save(match);
+
         }
+
+        matchRepository.saveAll(scheduledMatches);
     }
 
     public long countOverdueMatches() {
