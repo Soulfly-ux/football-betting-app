@@ -134,7 +134,64 @@
                 </div>
             </section>
 
-            <!-- SCHEDULED -->
+
+                <!-- STALE IN_PROGRESS -->
+                <section class="hero-card status-wide stale" th:if="${!#lists.isEmpty(staleInProgressMatches)}">
+                    <div class="hero-card-title">Needs attention</div>
+                    <div class="hero-card-sub">
+                        In-progress matches older than <span th:text="${staleHours}">6</span> hours.
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                            <tr>
+                                <th>Kick-off</th>
+                                <th>Match</th>
+                                <th class="center">League</th>
+                                <th class="center">Odds</th>
+                                <th class="center">Status</th>
+                                <th class="right">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="m : ${staleInProgressMatches}">
+                                <td class="muted" th:text="${#temporals.format(m.startTime, 'dd MMM yyyy, HH:mm')}"></td>
+                                <td>
+                                    <div class="match-cell">
+                                        <span class="team" th:text="${m.homeTeam.name}"></span>
+                                        <span class="vs">vs</span>
+                                        <span class="team" th:text="${m.awayTeam.name}"></span>
+                                    </div>
+                                </td>
+                                <td class="center">
+                                    <span class="badge role-badge" th:text="${m.leagueName}"></span>
+                                </td>
+                                <td class="center">
+                                    <div class="odds-mini">
+                                        <span class="odd"><span class="k">1</span> <span class="v" th:text="${m.oddHome}"></span></span>
+                                        <span class="odd"><span class="k">X</span> <span class="v" th:text="${m.oddDraw}"></span></span>
+                                        <span class="odd"><span class="k">2</span> <span class="v" th:text="${m.oddAway}"></span></span>
+                                    </div>
+                                </td>
+                                <td class="center">
+                                    <span class="badge badge-status--inprogress">Stale</span>
+                                </td>
+                                <td class="right">
+                                    <div class="row-actions">
+                                        <a class="btn btn-primary btn-sm"
+                                           th:href="@{|/admin/matches/${m.id}/finish|}">Finish</a>
+                                        <!-- Cancel ако го оставиш само за SCHEDULED, не го показвай тук -->
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+
+                <!-- SCHEDULED -->
             <section class="hero-card" th:if="${!#lists.isEmpty(scheduledMatches)}">
                 <div class="hero-card-title">Scheduled</div>
                 <div class="hero-card-sub">Upcoming matches that haven’t started yet.</div>

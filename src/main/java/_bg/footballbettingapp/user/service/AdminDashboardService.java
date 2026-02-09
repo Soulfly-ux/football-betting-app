@@ -71,6 +71,7 @@ public class AdminDashboardService {
                                 .cancelledMatches(matchAdminService.countByStatus(MatchStatus.CANCELLED))
                                 .scheduledMatches(matchAdminService.countByStatus(MatchStatus.SCHEDULED))
                                 .overdueMatches(matchAdminService.countOverdueMatches())
+                                .staleInProgressMatches(8)
                                 .build();
     }
 }

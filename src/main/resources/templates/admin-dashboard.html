@@ -125,16 +125,20 @@
                         <div class="stat-value" th:text="${stats.scheduledMatches + stats.inProgressMatches}">0</div>
                         <div class="stat-sub">
                             Scheduled:
-                            <span th:text="${stats.scheduledMatches}">0</span>
+                            <span  th:text="${stats.scheduledMatches}">0</span>
                             &nbsp;·&nbsp;
                             In progress:
-                            <span th:text="${stats.inProgressMatches}">0</span>
+                            <span  th:text="${stats.inProgressMatches}">0</span>
                             <br>
                             Finished:
                             <span th:text="${stats.finishedMatches}">0</span>
                             &nbsp;·&nbsp;
                             Cancelled:
-                            <span th:text="${stats.cancelledMatches}">0</span>
+                            <span  th:text="${stats.cancelledMatches}">0</span>
+
+                            Stale Matches:
+                            <span  th:text="${stats.staleInProgressMatches}"></span>
+
                         </div>
                     </div>
 

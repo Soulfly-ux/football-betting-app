@@ -44,8 +44,8 @@ public class AdminMatchesController {
     @GetMapping
     public ModelAndView getMatches(@AuthenticationPrincipal AuthenticationDetails authenticationDetails) {
 
-
-
+        int staleHours = 8;
+        List<Match> staleInProgressMatches = matchAdminService.getStaleInProgressMatches(staleHours);
         User user = userService.getUserById(authenticationDetails.getUserId());
 
 
@@ -69,6 +69,8 @@ public class AdminMatchesController {
         modelAndView.addObject("inProgressMatches", inProgressMatches);
         modelAndView.addObject("finishedMatches", finishedMatches);
         modelAndView.addObject("cancelledMatches", cancelledMatches);
+        modelAndView.addObject("staleHours", staleHours);
+        modelAndView.addObject("staleInProgressMatches", staleInProgressMatches);
 
 
 

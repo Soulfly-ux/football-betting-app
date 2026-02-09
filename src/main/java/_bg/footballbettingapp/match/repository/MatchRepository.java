@@ -40,7 +40,7 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
 
    List<Match> findAllByMatchStatusAndStartTimeIsGreaterThanEqual(MatchStatus matchStatus, LocalDateTime startTime);
 
-
+   List<Match> findAllByOrderByStartTimeDesc();
 
 
 

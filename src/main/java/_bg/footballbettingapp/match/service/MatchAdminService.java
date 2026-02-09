@@ -291,6 +291,21 @@ public class MatchAdminService {
     }
 
 
+    public long countStaleInProgress(int hours){
+        LocalDateTime threshold = LocalDateTime.now().minusHours(hours);
+        return matchRepository.countByMatchStatusAndStartTimeBefore(MatchStatus.IN_PROGRESS, threshold);
+    }
+
+
+    public List<Match> getStaleInProgressMatches(int hours) {
+        LocalDateTime threshold = LocalDateTime.now().minusHours(hours);
+        return matchRepository.findAllByMatchStatusAndStartTimeBeforeOrderByStartTimeAsc(MatchStatus.IN_PROGRESS, threshold);
+    }
+
+
+    public List<Match> getAllMatchesSorted() {
+        return matchRepository.findAllByOrderByStartTimeDesc();
+    }
 
 }
 
