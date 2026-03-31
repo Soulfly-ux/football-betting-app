@@ -1,2 +1,5 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+src/main/resources/templates/** linguist-detectable=false
+src/main/resources/static/** linguist-detectable=false
