@@ -25,7 +25,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // да се върне статични файлове
-                        .requestMatchers("/", "/register").permitAll()
+                        .requestMatchers("/","/home","/login", "/register").permitAll()
                         .requestMatchers(("/admin/**")).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
