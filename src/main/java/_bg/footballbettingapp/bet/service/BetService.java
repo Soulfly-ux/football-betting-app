@@ -4,6 +4,7 @@ import _bg.footballbettingapp.bet.model.Bet;
 import _bg.footballbettingapp.bet.model.BetStatus;
 import _bg.footballbettingapp.bet.model.BetType;
 import _bg.footballbettingapp.bet.repository.BetRepository;
+import _bg.footballbettingapp.email.service.NotificationService;
 import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.exception.InsufficientBalanceException;
 import _bg.footballbettingapp.match.model.Match;
@@ -28,11 +29,13 @@ public class BetService {
     private final BetRepository betRepository;
     private final MatchService matchService;
     private final UserService userService;
+    private final NotificationService notificationService;
     @Autowired
-    public BetService(BetRepository betRepository, MatchService matchService, UserService userService) {
+    public BetService(BetRepository betRepository, MatchService matchService, UserService userService, NotificationService notificationService) {
         this.betRepository = betRepository;
         this.matchService = matchService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
     @Transactional
     public Bet placeBet(UUID userId, UUID matchId, BetType betType, BigDecimal stake) {
@@ -66,7 +69,22 @@ public class BetService {
         user.setBalance(user.getBalance().subtract(stake));
         userService.save(user);
 
-        return betRepository.save(bet);
+        Bet savedBet = betRepository.save(bet);
+
+         String title ="Bet placed successfully";
+        String message = "Your bet on %s vs %s was placed successfully. Bet type: %s, stake: %s, odds: %s, potential win: %s."
+                .formatted(
+                        match.getHomeTeam().getName(),
+                        match.getAwayTeam().getName(),
+                        betType,
+                        stake,
+                        odds,
+                        potentialWin
+                );
+        notificationService.createNotification(userId, title, message);
+
+
+        return savedBet ;
     }
 
 
