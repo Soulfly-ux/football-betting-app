@@ -167,6 +167,7 @@
                 <a class="nav-link active" th:href="@{/users/edit}">Edit Profile</a>
                 <a class="nav-link" th:href="@{/matches}">Matches</a>
                 <a class="nav-link" th:href="@{/bets/my-bets}">My Bets</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/notifications}">Notifications</a>
                 <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}">Users </a>
                 <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/matches}">Matches (Admin) </a>
                 <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/matches/new}">Create Matches (Admin) </a>
@@ -270,7 +271,7 @@
                                 <div>
                                     <div class="hero-card-list-label">Review your slips</div>
                                     <div class="hero-card-list-value">
-                                        <a class="btn btn-outline" th:href="@{/my-bets}">
+                                        <a class="btn btn-outline" th:href="@{/bets/my-bets}">
                                             Go to My Bets
                                         </a>
                                     </div>
@@ -348,7 +349,7 @@
                         </table>
 
                         <div style="margin-top:0.8rem; text-align:right;">
-                            <a class="form-link" th:href="@{/my-bets}">
+                            <a class="form-link" th:href="@{/bets/my-bets}">
                                 View all bets →
                             </a>
                         </div>

@@ -32,50 +32,73 @@ public class NotificationService {
                 .type(EMAIL_NOTIFICATION_TYPE)
                 .build();
 
-        ResponseEntity<NotificationResponse> response = notificationClient.create(notificationRequest);
+        ResponseEntity<NotificationResponse> response;
+        try {
+            response = notificationClient.create(notificationRequest);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                log.error("Notification could not be created for user with id [{}].", userId);
+            }
+        } catch (Exception e) {
+            log.warn("Can't create notification to user id [{}]. Bet flow will continue.", userId, e);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            log.error("Notification could not be created for user with id [{}].", userId);
         }
     }
 
     public List<NotificationResponse> getNotifications(UUID userId) {
-        ResponseEntity<List<NotificationResponse>> response = notificationClient.getNotificationsByUser(userId);
+        try {
+            ResponseEntity<List<NotificationResponse>> response = notificationClient.getNotificationsByUser(userId);
 
-        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
-            log.error("Notifications could not be fetched for user with id [{}].", userId);
+            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+                log.error("Notifications could not be fetched for user with id [{}].", userId);
+                return Collections.emptyList();
+            }
+
+            return response.getBody();
+        } catch (Exception e) {
+            log.warn("Can't fetch notifications for user id [{}]. Empty list will be shown.", userId, e);
             return Collections.emptyList();
         }
-
-        return response.getBody();
     }
 
 
     public void markAsRead(UUID notificationId) {
-        ResponseEntity<NotificationResponse> response = notificationClient.markAsRead(notificationId);
+        try {
+            ResponseEntity<NotificationResponse> response = notificationClient.markAsRead(notificationId);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            log.error("Notification with id [{}] could not be marked as read.", notificationId);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                log.error("Notification with id [{}] could not be marked as read.", notificationId);
+            }
+        } catch (Exception e) {
+            log.warn("Can't mark notification with id [{}] as read.", notificationId, e);
         }
     }
 
 
     public void deleteNotification(UUID notificationId) {
-        ResponseEntity<Void> response = notificationClient.delete(notificationId);
+        try {
+            ResponseEntity<Void> response = notificationClient.delete(notificationId);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            log.error("Notification with id [{}] could not be deleted.", notificationId);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                log.error("Notification with id [{}] could not be deleted.", notificationId);
+            }
+        } catch (Exception e) {
+            log.warn("Can't delete notification with id [{}].", notificationId, e);
         }
     }
 
     public long getUnreadNotificationCount(UUID userId) {
-        ResponseEntity<UnreadNotificationCountResponse> response = notificationClient.getUnreadNotificationCount(userId);
+        try {
+            ResponseEntity<UnreadNotificationCountResponse> response = notificationClient.getUnreadNotificationCount(userId);
 
-        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
-            log.error("Unread notification count could not be fetched for user with id [{}].", userId);
+            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+                log.error("Unread notification count could not be fetched for user with id [{}].", userId);
+                return 0;
+            }
+
+            return response.getBody().getCount();
+        } catch (Exception e) {
+            log.warn("Can't fetch unread notification count for user id [{}]. Zero will be shown.", userId, e);
             return 0;
         }
-
-        return response.getBody().getCount();
     }
 }

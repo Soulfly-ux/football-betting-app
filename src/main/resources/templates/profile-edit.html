@@ -26,7 +26,8 @@
                 <a class="nav-link" th:href="@{/home}">Home</a>
                 <a class="nav-link" th:href="@{/matches}">Matches</a>
                 <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/bets/my-bets}">My Bets</a>
-                <a class="nav-link active" sec:authorize="isAuthenticated()" th:href="@{/profile/edit}">Edit profile</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/notifications}">Notifications</a>
+                <a class="nav-link active" sec:authorize="isAuthenticated()" th:href="@{/users/edit}">Edit profile</a>
                 <!-- по-късно можеш да вържеш реален logout -->
                 <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
                     <input type="hidden"

@@ -71,7 +71,7 @@ public class BetService {
 
         Bet savedBet = betRepository.save(bet);
 
-         String title ="Bet placed successfully";
+        String title = "Bet placed successfully";
         String message = "Your bet on %s vs %s was placed successfully. Bet type: %s, stake: %s, odds: %s, potential win: %s."
                 .formatted(
                         match.getHomeTeam().getName(),
@@ -84,7 +84,7 @@ public class BetService {
         notificationService.createNotification(userId, title, message);
 
 
-        return savedBet ;
+        return savedBet;
     }
 
 
