@@ -7,6 +7,7 @@ import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.team.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Component
+@Order(2)
 public class MatchInit implements CommandLineRunner {
 
 
@@ -33,6 +35,10 @@ public class MatchInit implements CommandLineRunner {
 
 
 
+
+        if (matchRepository.count() > 0){
+            return;
+        }
 
         Team arsenal = teamService.getByName("Arsenal");
         Team chelsea = teamService.getByName("Chelsea");
@@ -104,13 +110,6 @@ public class MatchInit implements CommandLineRunner {
                 .oddAway(new BigDecimal("3.00"))
                 .build();
 
-
-
-
-
-       if (matchRepository.count() > 0){
-           return;
-       }
 
 
 
