@@ -3,6 +3,7 @@ package _bg.footballbettingapp.exception;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.service.MatchAdminService;
 import _bg.footballbettingapp.match.service.MatchService;
+import _bg.footballbettingapp.security.AuthenticationDetails;
 import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.team.service.TeamService;
 import _bg.footballbettingapp.user.model.User;
@@ -10,16 +11,23 @@ import _bg.footballbettingapp.user.service.UserService;
 import _bg.footballbettingapp.web.dto.BetRequest;
 import _bg.footballbettingapp.web.dto.CreateMatchRequest;
 import _bg.footballbettingapp.web.dto.EditMatchRequest;
-import jakarta.servlet.http.HttpSession;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
-
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -94,9 +102,8 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MatchCancelException.class)
-    public ModelAndView handleMatchCancelException(MatchCancelException exception, HttpSession session) {
-
-        UUID userId = (UUID) session.getAttribute("user");
+    public ModelAndView handleMatchCancelException(MatchCancelException exception, AuthenticationDetails authenticationDetails) {
+        UUID userId = authenticationDetails.getUserId();
         User userById = userService.getUserById(userId);
 
         List<Match> adminOpenMatches = matchAdminService.getAdminOpenMatches();
@@ -122,6 +129,50 @@ public class GlobalExceptionHandler {
 
         return modelAndView;
 
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({
+            NoResourceFoundException.class,
+                    MethodArgumentTypeMismatchException.class
+
+            })
+    public ModelAndView handleNotFoundExceptions(Exception exception) {
+
+        log.warn("Not found error occurred: {}", exception.getMessage());
+
+        return new ModelAndView("not-found");
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView handleAccessDeniedException(Exception exception) {
+
+        log.warn("Access denied: {}", exception.getMessage());
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("error");
+        modelAndView.addObject("errorMessage", "You do not have permission to access this resource." );
+
+          return modelAndView;
+    }
+
+
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleAnyException(Exception e) {
+
+
+        log.error("Unexpected error occurred in football-betting-app.", e);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("error");
+        modelAndView.addObject("errorMessage", "An unexpected error occurred. Please try again.");
+
+       // e.printStackTrace();показва реалната грешка. По- професионално обаче е да ползвам log.error, a това е за учебna цел.
+
+        return modelAndView;
     }
 
 }

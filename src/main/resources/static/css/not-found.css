@@ -1,0 +1,71 @@
+.not-found-card {
+    max-width: 680px;
+    margin: 2rem auto;
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    background:
+            radial-gradient(circle at top left, rgba(96, 165, 250, 0.16), transparent 55%),
+            rgba(15, 23, 42, 0.95);
+}
+
+.not-found-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.not-found-code {
+    min-width: 84px;
+    height: 84px;
+    border-radius: 20px;
+    border: 2px solid rgba(96, 165, 250, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #bfdbfe;
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.not-found-title {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.not-found-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+.not-found-message {
+    margin-top: 0.85rem;
+    font-size: 0.95rem;
+    color: #e5e7eb;
+}
+
+.not-found-actions {
+    margin-top: 1.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .not-found-card {
+        margin: 1rem;
+    }
+
+    .not-found-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .not-found-code {
+        min-width: 72px;
+        height: 72px;
+        font-size: 1.6rem;
+    }
+}

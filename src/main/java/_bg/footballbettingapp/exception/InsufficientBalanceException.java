@@ -1,7 +1,10 @@
 package _bg.footballbettingapp.exception;
 
+import lombok.Getter;
+
 import java.util.UUID;
 
+@Getter
 public class InsufficientBalanceException extends DomainException{
 
     private final UUID matchId;
@@ -12,7 +15,4 @@ public class InsufficientBalanceException extends DomainException{
     }
 
 
-    public UUID getMatchId() {
-        return matchId;
-    }
 }

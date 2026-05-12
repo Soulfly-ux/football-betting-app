@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Not Found · Football Betting App</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/not-found.css}" href="/css/not-found.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="nav-logo">
+                <div class="nav-logo-badge">FB</div>
+                <div class="nav-logo-text">
+                    <div class="nav-logo-main">Football Betting</div>
+                    <div class="nav-logo-sub">Page not found</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+                <a class="nav-link" th:href="@{/matches}">Matches</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/bets/my-bets}">My Bets</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/notifications}">
+                    Notifications
+                    <span class="nav-badge"
+                          th:if="${navbarUnreadNotificationCount > 0}"
+                          th:text="${navbarUnreadNotificationCount}">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+            <section class="hero-card not-found-card">
+                <div class="not-found-header">
+                    <div class="not-found-code">404</div>
+                    <div>
+                        <h1 class="not-found-title">We couldn't find this page</h1>
+                        <p class="not-found-subtitle">
+                            The page you are looking for does not exist or the link is invalid.
+                        </p>
+                    </div>
+                </div>
+
+                <p class="not-found-message">
+                    Please check the address or go back to a valid page in the application.
+                </p>
+
+                <div class="not-found-actions">
+                    <a class="btn btn-primary" th:href="@{/home}">Go to home</a>
+                    <a class="btn btn-outline" href="javascript:history.back()">Go back</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Not Found · Football Betting App
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

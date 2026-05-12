@@ -1,7 +1,10 @@
 package _bg.footballbettingapp.exception;
 
+import lombok.Getter;
+
 import java.util.UUID;
 
+@Getter
 public class MatchEditException extends DomainException {
 
    private final UUID matchId;
@@ -16,10 +19,6 @@ public class MatchEditException extends DomainException {
         super(message, cause);
 
         this.matchId = matchId;
-    }
-
-    public UUID getMatchId() {
-        return matchId;
     }
 
 }
