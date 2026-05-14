@@ -25,17 +25,21 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // да се върне статични файлове
-                        .requestMatchers("/","/home","/login", "/register").permitAll()
+                        .requestMatchers("/","/home","/login", "/register","/access-denied", "/not-found"
+                        ).permitAll()
                         .requestMatchers(("/admin/**")).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home")
+                        .defaultSuccessUrl("/home",true)
                         .failureUrl("/login?error")
                         .permitAll()
 
                )
+
+
+
 //                .logout(logout -> logout
 //                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))// на кой endpoint ще се намира страницата
 //                        .logoutSuccessUrl("/")// ПРИ ЛОГАУТ ТРЯБВА ДА ПРАТИМ ПОТРЕБИТЕЛЯ НА СТРАНИЦА ПОЗВОЛЕНА ЗА ВСИЧКИ
@@ -51,13 +55,15 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
             .logout(logout -> logout
                         .logoutUrl("/logout")       // POST /logout
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID")
                         .permitAll()
 
 
         );
 
-        // Махаш formLogin/Logout за момента – няма нужда
+
         return http.build();
     }
 }
