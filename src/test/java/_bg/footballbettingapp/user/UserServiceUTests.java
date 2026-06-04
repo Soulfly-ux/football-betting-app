@@ -153,4 +153,28 @@ public class UserServiceUTests {
 
 
     }
+
+    @Test
+    void givenExistingEmail_whenRegister_thenExceptionIsThrown(){
+
+        // Given
+        String username = "Stamat";
+        String email = "StamatStamat@abv.bg";
+
+        RegisterRequest dto = RegisterRequest.builder()
+                .username(username)
+                .email(email)
+                .build();
+       User exsistingdUser = new User();
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(exsistingdUser));
+
+        // When & Then
+
+        assertThrows(DomainException.class, () -> userService.register(dto));
+        verify(userRepository, never()).save(any());
+
+
+    }
 }
