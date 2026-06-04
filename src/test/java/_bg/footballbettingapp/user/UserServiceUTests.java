@@ -1,11 +1,13 @@
 package _bg.footballbettingapp.user;
 
+import _bg.footballbettingapp.common.model.Country;
 import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.security.AuthenticationDetails;
 import _bg.footballbettingapp.user.model.Role;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.repository.UserRepository;
 import _bg.footballbettingapp.user.service.UserService;
+import _bg.footballbettingapp.web.dto.EditProfileRequest;
 import _bg.footballbettingapp.web.dto.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -246,6 +248,38 @@ public class UserServiceUTests {
 
         // When & Then
         assertThrows(DomainException.class, () -> userService.getUserByUsername(username));
+
+    }
+
+    @Test
+    void givenExistingUser_whenEditProfile_thenUserIsUpdatedAndSaved() {
+
+        // Given
+        UUID id = UUID.randomUUID();
+        EditProfileRequest dto = EditProfileRequest.builder()
+                .firstName("Cristiano")
+                .lastName("Cristianov")
+                .country(Country.ITALY)
+                .profilePictureUrl("image.at")
+                .build();
+
+        User user = User.builder()
+                .id(id)
+                .build();
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        // When
+        userService.editProfile(dto,id);
+
+        // Then
+        assertEquals("Cristiano", user.getFirstName());
+        assertEquals("Cristianov", user.getLastName());
+        assertEquals(Country.ITALY, user.getCountry());
+        assertEquals("image.at", user.getProfilePictureUrl());
+        verify(userRepository).save(user);
+
+
 
     }
 }
