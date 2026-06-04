@@ -282,4 +282,18 @@ public class UserServiceUTests {
 
 
     }
+    @Test
+    void givenMissingUser_whenEditProfile_thenExceptionIsThrown () {
+
+        // Given
+        UUID id = UUID.randomUUID();
+        EditProfileRequest dto = EditProfileRequest.builder().build();
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // When & Then
+
+        assertThrows(DomainException.class, () -> userService.editProfile(dto, id));
+        verify(userRepository, never()).save(any());
+
+    }
 }
