@@ -141,7 +141,7 @@ public class UserServiceUTests {
         User registeredUser = userService.register(dto);
 
 
-        // Given
+        // Then
         assertEquals(user.getId(), registeredUser.getId());
         assertEquals(dto.getUsername(),registeredUser.getUsername());
         assertEquals(dto.getEmail(), registeredUser.getEmail());
@@ -165,16 +165,87 @@ public class UserServiceUTests {
                 .username(username)
                 .email(email)
                 .build();
-       User exsistingdUser = new User();
+       User existingUser = new User();
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(exsistingdUser));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(existingUser));
 
         // When & Then
 
         assertThrows(DomainException.class, () -> userService.register(dto));
         verify(userRepository, never()).save(any());
 
+
+    }
+
+    @Test
+    void givenExistingUser_whenGetUserById_thenReturnUser() {
+
+        // Given
+        UUID id = UUID.randomUUID();
+        User user = User.builder()
+                .id(id)
+                .build();
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        // When
+        User userById = userService.getUserById(id);
+
+        // Then
+        assertEquals(user, userById);
+        verify(userRepository).findById(id);
+
+    }
+
+    @Test
+    void givenMissingUser_whenGetUserById_thenExceptionIsThrown() {
+
+        // Given
+        UUID id = UUID.randomUUID();
+
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+
+        // When & Then
+
+        assertThrows(DomainException.class, () -> userService.getUserById(id));
+
+
+    }
+
+    @Test
+    void givenExistingUsername_whenGetUserByUsername_thenReturnUser() {
+
+        // Given
+        String username = "Stamat";
+
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .username(username)
+                .build();
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+
+        // When
+        User userByUsername = userService.getUserByUsername(username);
+
+        // Then
+        assertEquals(user.getUsername(), userByUsername.getUsername());
+        verify(userRepository).findByUsername(username);
+    }
+
+    @Test
+    void givenMissingUsername_whenGetUserByUsername_thenExceptionIsThrown() {
+
+
+        // Given
+        String username = "Stamat";
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(DomainException.class, () -> userService.getUserByUsername(username));
 
     }
 }
