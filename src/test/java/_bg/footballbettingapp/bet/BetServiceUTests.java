@@ -1,5 +1,6 @@
 package _bg.footballbettingapp.bet;
 
+import _bg.footballbettingapp.bet.model.BetType;
 import _bg.footballbettingapp.bet.repository.BetRepository;
 import _bg.footballbettingapp.bet.service.BetService;
 import _bg.footballbettingapp.email.service.NotificationService;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -216,6 +218,64 @@ public class BetServiceUTests {
 
         // When & Then
         assertDoesNotThrow(() -> betService.validateMatchCanBeBetOn(match));
+
+    }
+
+
+    @Test
+    void givenHomeWinBetType_whenResolveOdds_thenReturnHomeOdds() {
+        // Given
+        Match match = Match.builder()
+                .oddHome(BigDecimal.valueOf(2.5))
+                .oddDraw(BigDecimal.valueOf(4.0))
+                .oddAway(BigDecimal.valueOf(3.0))
+                .build();
+
+        BetType betType = BetType.HOME_WIN;
+
+        // When
+        BigDecimal result = betService.resolveOdds(match, betType);
+
+        // Then
+        assertEquals( match.getOddHome(), result);
+    }
+
+    @Test
+    void givenDrawBetType_whenResolveOdds_thenReturnDrawOdds() {
+        // Given
+        Match match = Match.builder()
+                .oddHome(BigDecimal.valueOf(2.5))
+                .oddDraw(BigDecimal.valueOf(4.0))
+                .oddAway(BigDecimal.valueOf(3.0))
+                .build();
+
+        BetType betType = BetType.DRAW;
+
+        // When
+        BigDecimal result = betService.resolveOdds(match, betType);
+
+        // Then
+        assertEquals( match.getOddDraw(), result);
+
+    }
+
+    @Test
+    void givenAwayWinBetType_whenResolveOdds_thenReturnAwayOdds() {
+
+        // Given
+        Match match = Match.builder()
+                .oddHome(BigDecimal.valueOf(2.5))
+                .oddDraw(BigDecimal.valueOf(4.0))
+                .oddAway(BigDecimal.valueOf(3.0))
+                .build();
+
+        BetType betType = BetType.AWAY_WIN;
+
+        // When
+        BigDecimal result = betService.resolveOdds(match, betType);
+
+        // Then
+        assertEquals( match.getOddAway(), result);
 
     }
 
