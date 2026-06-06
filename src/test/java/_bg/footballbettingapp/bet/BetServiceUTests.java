@@ -17,10 +17,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -326,6 +327,47 @@ public class BetServiceUTests {
 
         // Then
         assertEquals(BetType.DRAW, resolveBetType);
+
+
+    }
+
+    @Test
+    void givenMissingUser_whenPlaceBet_thenExceptionIsThrown() {
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+        BigDecimal stake = BigDecimal.valueOf(3);
+
+        when(userService.getUserById(userId)).thenThrow(new DomainException("Missing user"));
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.placeBet(userId, matchId, betType, stake));
+        verify(matchService, never()).getMatchById(matchId);
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
+
+    }
+
+    @Test
+    void givenMissingMatch_whenPlaceBet_thenExceptionIsThrown() {
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+        BigDecimal stake = BigDecimal.valueOf(3);
+
+        User user = User.builder().build();
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenThrow(new DomainException("Match not found"));
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.placeBet(userId,matchId,betType,stake));
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
 
 
     }
