@@ -280,5 +280,55 @@ public class BetServiceUTests {
     }
 
 
+       @Test
+       void givenHomeGoalsGreaterThanAwayGoals_whenResolveBetType_thenReturnHomeWin() {
+        // Given
+        int homeGoals = 3;
+        int awayGoals = 1;
+
+        BetType betType = BetType.HOME_WIN;
+
+
+        // When
+           BetType resolveBetType = betService.resolveBetType(homeGoals, awayGoals);
+
+           // Then
+           assertEquals(betType, resolveBetType);
+
+
+       }
+
+
+    @Test
+    void givenAwayGoalsGreaterThanHomeGoals_whenResolveBetType_thenReturnAwayWin() {
+        // Given
+        int homeGoals = 1;
+        int awayGoals = 5;
+
+        // When
+        BetType resolveBetType = betService.resolveBetType(homeGoals, awayGoals);
+
+        // Then
+        assertEquals(BetType.AWAY_WIN, resolveBetType);
+
+
+    }
+
+
+    @Test
+    void givenEqualGoals_whenResolveBetType_thenReturnDraw() {
+        // Given
+        int homeGoals = 0;
+        int awayGoals = 0;
+
+        // When
+        BetType resolveBetType = betService.resolveBetType(homeGoals, awayGoals);
+
+        // Then
+        assertEquals(BetType.DRAW, resolveBetType);
+
+
+    }
+
 
 }
