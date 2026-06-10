@@ -372,5 +372,90 @@ public class BetServiceUTests {
 
     }
 
+    @Test
+    void givenInvalidStake_whenPlaceBet_thenExceptionIsThrown() {
+
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+        BigDecimal stake = BigDecimal.ZERO;
+
+        User user = User.builder().build();
+        Match match = Match.builder().build();
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.placeBet(userId,matchId,betType,stake));
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
+
+
+
+    }
+
+    @Test
+    void givenUserWithInsufficientBalance_whenPlaceBet_thenExceptionIsThrown(){
+
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+
+        User user = User.builder()
+                .balance(BigDecimal.valueOf(1))
+                .isActive(true)
+                .build();
+
+        Match match = Match.builder().build();
+
+        BigDecimal stake = BigDecimal.valueOf(10);
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+
+        // When & Then
+        assertThrows(InsufficientBalanceException.class, () -> betService.placeBet(userId, matchId, betType, stake));
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
+
+
+    }
+    @Test
+    void givenInactiveUser_whenPlaceBet_thenExceptionIsThrown() {
+
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+
+        User user = User.builder()
+                .balance(BigDecimal.valueOf(100))
+                .isActive(false)
+                .build();
+
+        Match match = Match.builder().build();
+
+        BigDecimal stake = BigDecimal.valueOf(10);
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.placeBet(userId, matchId, betType, stake));
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
+
+
+    }
+
 
 }
