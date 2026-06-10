@@ -1,5 +1,7 @@
 package _bg.footballbettingapp.bet;
 
+import _bg.footballbettingapp.bet.model.Bet;
+import _bg.footballbettingapp.bet.model.BetStatus;
 import _bg.footballbettingapp.bet.model.BetType;
 import _bg.footballbettingapp.bet.repository.BetRepository;
 import _bg.footballbettingapp.bet.service.BetService;
@@ -9,6 +11,7 @@ import _bg.footballbettingapp.exception.InsufficientBalanceException;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.model.MatchStatus;
 import _bg.footballbettingapp.match.service.MatchService;
+import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -453,6 +456,171 @@ public class BetServiceUTests {
         verify(betRepository, never()).save(any());
         verify(notificationService, never()).createNotification(any(),any(), any());
         verify(userService, never()).save(any());
+
+
+    }
+
+    @Test
+    void givenMatchThatIsNotScheduled_whenPlaceBet_thenExceptionIsThrown() {
+
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+
+        User user = User.builder()
+                .balance(BigDecimal.valueOf(100))
+                .isActive(true)
+                .build();
+
+        Match match = Match.builder()
+                .matchStatus(MatchStatus.CANCELLED)
+                .build();
+
+        BigDecimal stake = BigDecimal.valueOf(10);
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.placeBet(userId, matchId, betType, stake));
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
+
+
+    }
+    @Test
+    void givenStartedMatch_whenPlaceBet_thenExceptionIsThrown() {
+
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+
+        User user = User.builder()
+                .balance(BigDecimal.valueOf(100))
+                .isActive(true)
+                .build();
+
+        Match match = Match.builder()
+                .matchStatus(MatchStatus.SCHEDULED)
+                .startTime(LocalDateTime.now().minusDays(1))
+                .build();
+
+        BigDecimal stake = BigDecimal.valueOf(10);
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.placeBet(userId, matchId, betType, stake));
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
+
+    }
+
+    @Test
+    void givenMatchWithMissingOdds_whenPlaceBet_thenExceptionIsThrown() {
+
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+
+        User user = User.builder()
+                .balance(BigDecimal.valueOf(100))
+                .isActive(true)
+                .build();
+
+        Match match = Match.builder()
+                .matchStatus(MatchStatus.SCHEDULED)
+                .startTime(LocalDateTime.now().plusDays(2))
+                .oddDraw(BigDecimal.valueOf(3.00))
+                .oddAway(BigDecimal.valueOf(3.90))
+                .build();
+
+        BigDecimal stake = BigDecimal.valueOf(10);
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.placeBet(userId, matchId, betType, stake));
+        verify(betRepository, never()).save(any());
+        verify(notificationService, never()).createNotification(any(),any(), any());
+        verify(userService, never()).save(any());
+
+
+    }
+
+    @Test
+    void givenValidBetData_whenPlaceBet_thenBetIsPlacedSuccessfully() {
+        // Given
+        UUID userId = UUID.randomUUID();
+        UUID matchId = UUID.randomUUID();
+        BetType betType = BetType.HOME_WIN;
+
+        User user = User.builder()
+                .id(userId)
+                .balance(BigDecimal.valueOf(100))
+                .isActive(true)
+                .build();
+
+        Team homeTeam = Team.builder()
+                .name("Inter Milan")
+                .build();
+        Team awayTeam = Team.builder()
+                .name("Juventus")
+                .build();
+
+        Match match = Match.builder()
+                .id(matchId)
+                .matchStatus(MatchStatus.SCHEDULED)
+                .startTime(LocalDateTime.now().plusDays(2))
+                .homeTeam(homeTeam)
+                .awayTeam(awayTeam)
+                .oddHome(BigDecimal.valueOf(2.00))
+                .oddDraw(BigDecimal.valueOf(3.00))
+                .oddAway(BigDecimal.valueOf(3.90))
+                .build();
+
+        BigDecimal stake = BigDecimal.valueOf(10);
+
+        Bet savedBet = Bet.builder()
+                .id(UUID.randomUUID())
+                .betType(betType)
+                .stake(stake)
+                .user(user)
+                .match(match)
+                .potentialWinningAmount(BigDecimal.valueOf(20))
+                .betStatus(BetStatus.PENDING)
+                .odds(BigDecimal.valueOf(2))
+                .build();
+
+        when(userService.getUserById(userId)).thenReturn(user);
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+        when(betRepository.save(any())).thenReturn(savedBet);
+
+
+
+        // When
+        Bet result = betService.placeBet(userId, matchId, betType, stake);
+
+        // Then
+        assertEquals(savedBet.getId(), result.getId());
+        assertEquals(savedBet.getBetType(), result.getBetType());
+        assertEquals(savedBet.getStake(), result.getStake());
+        assertEquals(savedBet.getBetStatus(), result.getBetStatus());
+        assertEquals(savedBet.getOdds(), result.getOdds());
+        assertEquals(savedBet.getPotentialWinningAmount(), result.getPotentialWinningAmount());
+        assertEquals( BigDecimal.valueOf(90), user.getBalance());
+
+
+        verify(betRepository).save(any());
+        verify(notificationService).createNotification(any(),any(), any());
+        verify(userService).save(user);
 
 
     }
