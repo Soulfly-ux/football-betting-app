@@ -24,6 +24,7 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -624,6 +625,148 @@ public class BetServiceUTests {
 
 
     }
+
+    @Test
+   void givenMatchThatIsNotFinished_whenSettleBetForMatch_thenExceptionIsThrown() {
+        // Given
+        UUID matchId = UUID.randomUUID();
+        Match match = Match.builder()
+                .id(matchId)
+                .matchStatus(MatchStatus.SCHEDULED)
+                .build();
+
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.settleBetForMatch(matchId));
+        verify(betRepository, never()).findAllByMatchAndBetStatus(match, BetStatus.PENDING);
+
+    }
+
+    @Test
+    void givenFinishedMatchWithMissingGoals_whenSettleBetForMatch_thenExceptionIsThrown() {
+
+        // Given
+        UUID matchId = UUID.randomUUID();
+
+        Match match = Match.builder()
+                .id(matchId)
+                .matchStatus(MatchStatus.FINISHED)
+                .homeGoals(3)
+                .build();
+
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+
+        // When & Then
+        assertThrows(DomainException.class, () -> betService.settleBetForMatch(matchId));
+        verify(betRepository, never()).findAllByMatchAndBetStatus(match, BetStatus.PENDING);
+
+    }
+
+    @Test
+    void givenFinishedMatchWithWinningPendingBet_whenSettleBetForMatch_thenBetIsWonAndUserBalanceIsIncreased() {
+        // Given
+        UUID matchId = UUID.randomUUID();
+
+
+        Match match = Match.builder()
+                .id(matchId)
+                .matchStatus(MatchStatus.FINISHED)
+                .homeGoals(3)
+                .awayGoals(1)
+                .build();
+
+        User user = User.builder()
+                .balance(BigDecimal.valueOf(100))
+                .build();
+
+        Bet bet = Bet.builder()
+                .betStatus(BetStatus.PENDING)
+                .betType(BetType.HOME_WIN)
+                .user(user)
+                .potentialWinningAmount(BigDecimal.valueOf(30))
+                .build();
+
+        List<Bet> pendingBets = List.of(bet);
+
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+        when(betRepository.findAllByMatchAndBetStatus(match, BetStatus.PENDING)).thenReturn(pendingBets);
+
+        // When
+        betService.settleBetForMatch(matchId);
+
+        // Then
+        assertEquals(BetStatus.WON, bet.getBetStatus()) ;
+        assertEquals(BigDecimal.valueOf(130), user.getBalance());
+        assertNotNull(bet.getSettledOn());
+        verify(betRepository).findAllByMatchAndBetStatus(match, BetStatus.PENDING);
+
+
+    }
+
+    @Test
+    void givenFinishedMatchWithLosingPendingBet_whenSettleBetForMatch_thenBetIsLostAndBalanceIsNotChanged() {
+
+        // Given
+        UUID matchId = UUID.randomUUID();
+
+
+        Match match = Match.builder()
+                .id(matchId)
+                .matchStatus(MatchStatus.FINISHED)
+                .homeGoals(0)
+                .awayGoals(1)
+                .build();
+
+        User user = User.builder()
+                .balance(BigDecimal.valueOf(100))
+                .build();
+
+        Bet bet = Bet.builder()
+                .betStatus(BetStatus.PENDING)
+                .betType(BetType.HOME_WIN)
+                .potentialWinningAmount(BigDecimal.valueOf(20))
+                .user(user)
+                .build();
+
+
+
+        List<Bet> pendingBets = List.of(bet);
+
+        when(matchService.getMatchById(matchId)).thenReturn(match);
+        when(betRepository.findAllByMatchAndBetStatus(match, BetStatus.PENDING)).thenReturn(pendingBets);
+
+        // When
+        betService.settleBetForMatch(matchId);
+
+        // Then
+        assertEquals(BetStatus.LOST, bet.getBetStatus()) ;
+
+        assertNotNull(bet.getSettledOn());
+        verify(betRepository).findAllByMatchAndBetStatus(match, BetStatus.PENDING);
+
+
+    }
+
+    @Test
+    void getBetsByUser() {
+        // Given
+        User user = User.builder().build();
+
+        List<Bet> bets = List.of(new Bet(), new Bet());
+        when(betRepository.findAllByUserOrderByCreatedOnDesc(user)).thenReturn(bets);
+
+        // When
+        List<Bet> betsByUser = betService.getBetsByUser(user);
+
+        // Then
+        assertEquals(bets, betsByUser);
+        verify(betRepository).findAllByUserOrderByCreatedOnDesc(user);
+
+    }
+
+    @Test
+    void givenMatchAndBetStatus_whenGetBetsByMatchAndStatus_thenReturnBets() {}
 
 
 }
