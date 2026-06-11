@@ -227,7 +227,8 @@ public class BetService {
     }
 
     public long countByBetStatus(BetStatus betStatus) {
-        return betRepository.countByBetStatus(betStatus);
+        return
+                betRepository.countByBetStatus(betStatus);
     }
 
 

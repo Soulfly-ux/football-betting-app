@@ -14,6 +14,7 @@ import _bg.footballbettingapp.match.service.MatchService;
 import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.user.model.User;
 import _bg.footballbettingapp.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class BetServiceUTests {
     @Mock
@@ -766,7 +768,73 @@ public class BetServiceUTests {
     }
 
     @Test
-    void givenMatchAndBetStatus_whenGetBetsByMatchAndStatus_thenReturnBets() {}
+    void givenMatchAndBetStatus_whenGetBetsByMatchAndStatus_thenReturnBets() {
+        // Given
+        Match match = Match.builder().build();
+        BetStatus betStatus = BetStatus.PENDING;
+
+        List<Bet> bets = List.of(new Bet(), new Bet());
+        when(betRepository.findAllByMatchAndBetStatus(match, betStatus)).thenReturn(bets);
+
+        // When
+        List<Bet> betList = betService.getBetsByMatchAndStatus(match, betStatus);
+
+        // Then
+        assertEquals(bets, betList);
+        verify(betRepository).findAllByMatchAndBetStatus(match, betStatus);
+
+
+    }
+
+    @Test
+    void givenBetStatus_whenCountByBetStatus_thenReturnCount() {
+        // Given
+        BetStatus betStatus = BetStatus.WON;
+        long count = 2;
+
+        when(betRepository.countByBetStatus(betStatus)).thenReturn(count);
+
+        // When
+        long result = betService.countByBetStatus(betStatus);
+
+        // Then
+        assertEquals(count, result);
+        verify(betRepository).countByBetStatus(betStatus);
+
+
+    }
+
+    @Test
+    void whenCountAllBets_thenReturnCount() {
+        // Given
+        long count = 23;
+
+        when(betRepository.count()).thenReturn(count);
+
+        // When
+        long result = betService.countAllBets();
+
+        // Then
+        assertEquals(count, result);
+        verify(betRepository).count();
+
+
+
+    }
+
+    @Test
+    void givenBet_whenSave_thenRepositorySaveIsCalled() {
+        // Given
+        Bet bet = new Bet();
+
+        // When
+        betService.save(bet);
+
+        // Then
+        verify(betRepository).save(bet);
+
+
+    }
 
 
 }
