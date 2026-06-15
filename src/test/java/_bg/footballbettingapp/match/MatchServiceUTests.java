@@ -2,6 +2,7 @@ package _bg.footballbettingapp.match;
 
 import _bg.footballbettingapp.exception.DomainException;
 import _bg.footballbettingapp.match.model.Match;
+import _bg.footballbettingapp.match.model.MatchStatus;
 import _bg.footballbettingapp.match.repository.MatchRepository;
 import _bg.footballbettingapp.match.service.MatchService;
 import org.junit.jupiter.api.Test;
@@ -10,12 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MatchServiceUTests {
@@ -78,6 +77,87 @@ public class MatchServiceUTests {
         String resultAsString = matchService.getResultAsString(match);
 
         assertEquals("2:1", resultAsString);
+
+
+    }
+
+    @Test
+    void givenMissingMatch_whenSetResult_thenExceptionIsThrown() {
+
+
+        UUID matchId = UUID.randomUUID();
+        int homeGoals = 1;
+        int awayGoals = 0;
+        Match match = Match.builder().build();
+
+        when(matchRepository.findById(matchId)).thenReturn(Optional.empty());
+
+        assertThrows(DomainException.class, () -> matchService.setResult(matchId, homeGoals, awayGoals));
+        verify(matchRepository, never()).save(any());
+    }
+
+
+    @Test
+    void givenCancelledMatch_whenSetResult_thenExceptionIsThrown() {
+
+        UUID matchId = UUID.randomUUID();
+        int homeGoals = 1;
+        int awayGoals = 0;
+
+        Match match = Match.builder()
+                .matchStatus(MatchStatus.CANCELLED)
+                .build();
+
+        when(matchRepository.findById(matchId)).thenReturn(Optional.of(match));
+
+
+        assertThrows(DomainException.class, () -> matchService.setResult(matchId, homeGoals, awayGoals));
+        verify(matchRepository, never()).save(any());
+
+    }
+
+    @Test
+    void givenFinishedMatch_whenSetResult_thenExceptionIsThrown() {
+
+        UUID matchId = UUID.randomUUID();
+        int homeGoals = 1;
+        int awayGoals = 0;
+
+        Match match = Match.builder()
+                .matchStatus(MatchStatus.FINISHED)
+                .build();
+
+        when(matchRepository.findById(matchId)).thenReturn(Optional.of(match));
+
+
+        assertThrows(DomainException.class, () -> matchService.setResult(matchId, homeGoals, awayGoals));
+        verify(matchRepository, never()).save(any());
+
+
+    }
+
+    @Test
+    void givenScheduledMatch_whenSetResult_thenUpdateGoalsStatusAndSaveMatch() {
+
+        UUID matchId = UUID.randomUUID();
+        int homeGoals = 1;
+        int awayGoals = 0;
+
+        Match match = Match.builder()
+                .id(matchId)
+                .matchStatus(MatchStatus.SCHEDULED)
+                .build();
+
+        when(matchRepository.findById(matchId)).thenReturn(Optional.of(match));
+        when(matchRepository.save(match)).thenReturn(match);
+
+        Match result = matchService.setResult(matchId, homeGoals, awayGoals);
+
+
+        assertEquals(match.getHomeGoals(), result.getHomeGoals());
+        assertEquals(match.getAwayGoals(), result.getAwayGoals());
+        assertEquals(MatchStatus.FINISHED, result.getMatchStatus());
+        verify(matchRepository).save(match);
 
 
     }
