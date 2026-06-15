@@ -13,6 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -161,6 +164,50 @@ public class MatchServiceUTests {
 
 
     }
+
+    @Test
+    void whenGetUpcomingMatches_thenReturnScheduledUpcomingMatches() {
+
+
+
+        List<Match> upcomingMatches = List.of(new Match(), new Match(), new Match());
+        when(matchRepository.findAllByMatchStatusAndStartTimeAfterOrderByStartTimeAsc(eq(MatchStatus.SCHEDULED), any(LocalDateTime.class))).thenReturn(upcomingMatches);
+
+
+        List<Match> result = matchService.getUpcomingMatches();
+
+        assertEquals(upcomingMatches, result);
+        verify(matchRepository).findAllByMatchStatusAndStartTimeAfterOrderByStartTimeAsc(eq(MatchStatus.SCHEDULED), any(LocalDateTime.class));
+
+
+    }
+
+    @Test
+    void whenCountMatches_thenReturnCount() {
+        long count = 5;
+
+        when(matchRepository.count()).thenReturn(count);
+
+        long result = matchService.countMatches();
+
+        assertEquals(count, result);
+        verify(matchRepository).count();
+
+
+    }
+
+    @Test
+    void givenMatch_whenSave_thenRepositorySaveIsCalled() {
+
+        Match match = Match.builder().build();
+
+        matchService.save(match);
+
+        verify(matchRepository).save(match);
+
+    }
+
+
 
 
 }
