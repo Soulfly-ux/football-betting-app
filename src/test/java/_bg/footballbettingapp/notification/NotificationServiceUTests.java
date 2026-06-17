@@ -1,6 +1,7 @@
 package _bg.footballbettingapp.notification;
 
 import _bg.footballbettingapp.email.client.NotificationClient;
+import _bg.footballbettingapp.email.client.dto.NotificationRequest;
 import _bg.footballbettingapp.email.client.dto.NotificationResponse;
 import _bg.footballbettingapp.email.client.dto.UnreadNotificationCountResponse;
 import _bg.footballbettingapp.email.service.NotificationService;
@@ -126,6 +127,23 @@ public class NotificationServiceUTests {
         verify(notificationClient).getUnreadNotificationCount(userId);
 
 
+
+    }
+
+    @Test
+    void givenSuccessfulResponse_whenCreateNotification_thenClientIsCalled() {
+        UUID userId = UUID.randomUUID();
+        String title = "Test";
+        String message = "Test, Test, Test";
+
+       NotificationResponse notificationResponse = NotificationResponse.builder().build();
+
+        ResponseEntity<NotificationResponse> response = ResponseEntity.ok(notificationResponse);
+        when(notificationClient.create(any(NotificationRequest.class))).thenReturn(response);
+
+        notificationService.createNotification(userId,title,message);
+
+        verify(notificationClient).create(any(NotificationRequest.class));
 
     }
  }
