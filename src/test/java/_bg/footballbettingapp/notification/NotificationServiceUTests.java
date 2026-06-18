@@ -155,13 +155,59 @@ public class NotificationServiceUTests {
         String title = "Test";
         String message = "Test, Test, Test";
 
-        NotificationResponse notificationResponse = NotificationResponse.builder().build();
+
 
         when(notificationClient.create(any(NotificationRequest.class))).thenThrow(new RuntimeException());
 
         notificationService.createNotification(userId, title, message);
         verify(notificationClient).create(any(NotificationRequest.class));
+    }
 
+    @Test
+    void givenSuccessfulResponse_whenMarkAsRead_thenClientIsCalled() {
+        UUID notificationId = UUID.randomUUID();
+
+        NotificationResponse notificationResponse = NotificationResponse.builder().build();
+
+        ResponseEntity<NotificationResponse> response = ResponseEntity.ok(notificationResponse);
+
+        when(notificationClient.markAsRead(notificationId)).thenReturn(response);
+
+        notificationService.markAsRead(notificationId);
+
+        verify(notificationClient).markAsRead(notificationId);
+
+    }
+
+    @Test
+    void givenClientThrowsException_whenMarkAsRead_thenNoExceptionIsThrown() {
+        UUID notificationId = UUID.randomUUID();
+
+        when(notificationClient.markAsRead(notificationId)).thenThrow(new RuntimeException());
+
+        notificationService.markAsRead(notificationId);
+        verify(notificationClient).markAsRead(notificationId);
+    }
+
+    @Test
+    void givenSuccessfulResponse_whenDeleteNotification_thenClientIsCalled() {
+
+        UUID notificationId = UUID.randomUUID();
+        ResponseEntity<Void> response = ResponseEntity.ok().build();
+        when(notificationClient.delete(notificationId)).thenReturn(response);
+
+        notificationService.deleteNotification(notificationId);
+        verify(notificationClient).delete(notificationId);
+    }
+
+    @Test
+    void givenClientThrowsException_whenDeleteNotification_thenNoExceptionIsThrown() {
+
+        UUID notificationId = UUID.randomUUID();
+        when(notificationClient.delete(notificationId)).thenThrow(new RuntimeException());
+
+        notificationService.deleteNotification(notificationId);
+        verify(notificationClient).delete(notificationId);
 
 
     }
