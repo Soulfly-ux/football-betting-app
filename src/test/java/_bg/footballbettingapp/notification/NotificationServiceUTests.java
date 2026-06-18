@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import javax.management.Notification;
@@ -144,6 +145,24 @@ public class NotificationServiceUTests {
         notificationService.createNotification(userId,title,message);
 
         verify(notificationClient).create(any(NotificationRequest.class));
+
+    }
+
+
+    @Test
+    void givenClientThrowsException_whenCreateNotification_thenNoExceptionIsThrown() {
+        UUID userId = UUID.randomUUID();
+        String title = "Test";
+        String message = "Test, Test, Test";
+
+        NotificationResponse notificationResponse = NotificationResponse.builder().build();
+
+        when(notificationClient.create(any(NotificationRequest.class))).thenThrow(new RuntimeException());
+
+        notificationService.createNotification(userId, title, message);
+        verify(notificationClient).create(any(NotificationRequest.class));
+
+
 
     }
  }
