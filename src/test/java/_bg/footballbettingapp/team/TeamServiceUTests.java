@@ -14,7 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class TeamServiceUTests {
@@ -72,7 +74,48 @@ public class TeamServiceUTests {
 
         assertEquals(team, result);
         verify(teamRepository).findByNameIgnoreCase(normalizedName);
+    }
 
+
+    @Test
+    void givenExistingTeamId_whenGetById_thenReturnTeam() {
+
+        UUID id = UUID.randomUUID();
+        Team team = Team.builder()
+                .id(id)
+                .build();
+        when(teamRepository.findById(id)).thenReturn(Optional.of(team));
+
+        Team result = teamService.getById(id);
+
+        assertEquals(team, result);
+        verify(teamRepository).findById(id);
 
     }
+
+    @Test
+    void givenMissingTeamId_whenGetById_thenExceptionIsThrown() {
+
+        UUID id = UUID.randomUUID();
+        when(teamRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(DomainException.class, () -> teamService.getById(id));
+
+    }
+
+    @Test
+    void whenGetAllTeamSortedByName_thenReturnTeams() {
+
+        List<Team> teams = List.of(new Team(), new Team());
+        when(teamRepository.findAllByOrderByNameAsc()).thenReturn(teams);
+
+        List<Team> result = teamService.getAllTeamSortedByName();
+
+        assertEquals(teams, result);
+        verify(teamRepository).findAllByOrderByNameAsc();
+
+    }
+
+
+
 }

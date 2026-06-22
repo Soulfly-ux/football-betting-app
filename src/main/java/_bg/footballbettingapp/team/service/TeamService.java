@@ -22,7 +22,7 @@ public class TeamService {
 
 
     public Team getByName(String name) {
-        String normalizedName = name.trim();
+            String normalizedName = name.trim();
 
         return teamRepository.findByNameIgnoreCase(normalizedName)
                 .orElseThrow(() -> new DomainException("Team not found: '" + normalizedName + "'"));
