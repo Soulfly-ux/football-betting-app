@@ -2,12 +2,15 @@ package _bg.footballbettingapp.match;
 
 import _bg.footballbettingapp.bet.service.BetService;
 import _bg.footballbettingapp.exception.DomainException;
+import _bg.footballbettingapp.exception.MatchCreateException;
 import _bg.footballbettingapp.match.model.Match;
 import _bg.footballbettingapp.match.model.MatchStatus;
 import _bg.footballbettingapp.match.repository.MatchRepository;
 import _bg.footballbettingapp.match.service.MatchAdminService;
+import _bg.footballbettingapp.team.model.Team;
 import _bg.footballbettingapp.team.service.TeamService;
 import _bg.footballbettingapp.user.service.UserService;
+import _bg.footballbettingapp.web.dto.CreateMatchRequest;
 import _bg.footballbettingapp.web.dto.EditMatchRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -169,6 +172,78 @@ public class MatchAdminServiceUTests {
         assertThrows(DomainException.class, () -> matchAdminService.finishMatch(id, homeGoals, awayGoals));
         verify(matchRepository, never()).save(any());
         verify(betService, never()).settleBetForMatch(any());
+
+    }
+
+    @Test
+    void givenInProgressMatch_whenFinishMatch_thenSetGoalsStatusSaveAndSettleBets() {
+
+        UUID id = UUID.randomUUID();
+        int homeGoals = 3;
+        int awayGoals = 0;
+
+        Match match = Match.builder()
+                .matchStatus(MatchStatus.IN_PROGRESS)
+                .build();
+
+        when(matchRepository.findById(id)).thenReturn(Optional.of(match));
+
+        matchAdminService.finishMatch(id, homeGoals, awayGoals);
+
+        assertEquals(homeGoals, match.getHomeGoals());
+        assertEquals(awayGoals, match.getAwayGoals());
+        assertEquals(MatchStatus.FINISHED, match.getMatchStatus());
+        verify(matchRepository).save(match);
+        verify(betService).settleBetForMatch(id);
+
+    }
+
+    @Test
+    void givenSameHomeAndAwayTeam_whenCreateNewMatch_thenExceptionIsThrown() {
+
+        UUID homeTeamId = UUID.randomUUID();
+
+
+        CreateMatchRequest createMatchRequest = CreateMatchRequest
+                .builder()
+                .homeTeamId(homeTeamId)
+                .awayTeamId(homeTeamId)
+                .build();
+
+        Team home = Team.builder().build();
+        Team away = Team.builder().build();
+
+
+        when(teamService.getById(homeTeamId)).thenReturn(home);
+
+
+        assertThrows(MatchCreateException.class, () -> matchAdminService.createNewMatch(createMatchRequest));
+        verify(matchRepository, never()).saveAndFlush(any());
+    }
+
+    @Test
+    void givenStartTimeInPast_whenCreateNewMatch_thenExceptionIsThrown() {
+
+        UUID homeTeamId = UUID.randomUUID();
+        UUID awayTeamId = UUID.randomUUID();
+
+        CreateMatchRequest createMatchRequest = CreateMatchRequest
+                .builder()
+                .homeTeamId(homeTeamId)
+                .awayTeamId(awayTeamId)
+                .startTime(LocalDateTime.now().minusDays(3))
+                .build();
+
+        Team home = Team.builder().build();
+        Team away = Team.builder().build();
+
+
+        when(teamService.getById(homeTeamId)).thenReturn(home);
+        when(teamService.getById(awayTeamId)).thenReturn(away);
+
+        assertThrows(MatchCreateException.class, () -> matchAdminService.createNewMatch(createMatchRequest));
+        verify(matchRepository, never()).saveAndFlush(any());
+
 
     }
 }
